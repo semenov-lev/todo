@@ -1,0 +1,56 @@
+[
+  {
+    "model": "usersapp.user",
+    "pk": 1,
+    "fields": {
+      "password": "test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "tester1",
+      "first_name": "tester1",
+      "last_name": "tester1",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-02-07T13:06:29Z",
+      "email": "tester1@mail.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "usersapp.user",
+    "pk": 2,
+    "fields": {
+      "password": "tester2",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "tester2",
+      "first_name": "tester2",
+      "last_name": "tester2",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-02-07T13:06:49Z",
+      "email": "tester2@mail.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "usersapp.user",
+    "pk": 3,
+    "fields": {
+      "password": "tester3",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "tester3",
+      "first_name": "tester3",
+      "last_name": "tester3",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-02-07T13:06:59Z",
+      "email": "tester3@mail.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
