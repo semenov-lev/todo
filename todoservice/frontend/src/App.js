@@ -1,10 +1,12 @@
+import './components/css/Navigation.css';
+import './components/css/Footer.css'
+import './components/css/Users.css'
 import './App.css';
-import './components/Menu.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import UserList from "./components/Users";
 import axios from "axios";
-import NavMenuBar from "./components/Menu";
+import NavigationBar from "./components/Navigation";
+import Footer from "./components/Footer";
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const getUrl = (url) => {
@@ -17,7 +19,6 @@ class App extends React.Component {
         super(props);
         this.state = {
             'users': [],
-            'navItems': []
         }
     }
 
@@ -33,11 +34,14 @@ class App extends React.Component {
     render() {
         return (
             <>
-                <div className={'NavMenuBar'}>
-                    <NavMenuBar/>
+                <div className={'navigation-bar'}>
+                    <NavigationBar/>
                 </div>
-                <div className={'Container'}>
+                <div className={'context'}>
                     <UserList users={this.state.users}/>
+                </div>
+                <div className={'footer'}>
+                    <Footer/>
                 </div>
             </>
         )
