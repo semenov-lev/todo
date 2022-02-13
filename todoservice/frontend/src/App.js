@@ -10,7 +10,7 @@ import Footer from "./components/Footer";
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const getUrl = (url) => {
-  return `${DOMAIN}${url}`
+    return `${DOMAIN}${url}`
 }
 
 
@@ -19,11 +19,20 @@ class App extends React.Component {
         super(props);
         this.state = {
             'users': [],
+            'projects': [],
+            'todo': [],
         }
     }
 
     componentDidMount() {
         axios.get(getUrl('users/')).then(response => {
+            const users = response.data
+            this.setState({
+                'users': users,
+            })
+        }).catch(error => console.log(error))
+
+        axios.get(getUrl('projects/')).then(response => {
             const users = response.data
             this.setState({
                 'users': users,
