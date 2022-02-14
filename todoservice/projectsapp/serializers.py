@@ -3,7 +3,12 @@ from .models import Project, ToDo
 
 
 class ProjectModelSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(source='get_status_display')
     users = serializers.StringRelatedField(many=True)
+    deadline_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    create_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    update_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+
 
     class Meta:
         model = Project
@@ -11,6 +16,9 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
 
 class ToDoModelSerializer(serializers.HyperlinkedModelSerializer):
+    create_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    update_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+
     class Meta:
         model = ToDo
-        fields = '__all__'
+        exclude = ('is_active',)

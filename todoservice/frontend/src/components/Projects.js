@@ -1,6 +1,13 @@
 import React from "react";
 
 
+const UsersList = ({user}) => {
+    return(
+        <li>{user}</li>
+    )
+}
+
+
 const ProjectItem = ({project}) => {
     return (
         <tr>
@@ -8,23 +15,37 @@ const ProjectItem = ({project}) => {
                 {project.id}
             </td>
             <td>
-                {project.username}
+                {project.name}
             </td>
             <td>
-                {project.first_name}
+                {project.description}
             </td>
             <td>
-                {project.last_name}
+                <a href={project.rep_url}>Репозиторий</a>
             </td>
             <td>
-                {project.email}
+                {project.status}
+            </td>
+            <td>
+                {project.deadline_timestamp}
+            </td>
+            <td>
+                {project.create_timestamp}
+            </td>
+            <td>
+                {project.update_timestamp}
+            </td>
+            <td>
+                <ul>
+                   {project.users.map((user) => <UsersList user={user} key={user}/>)}
+                </ul>
             </td>
         </tr>
     )
 }
 
 
-const UserList = ({users}) => {
+const ProjectList = ({projects}) => {
     return (
         <table>
             <thead>
@@ -33,24 +54,36 @@ const UserList = ({users}) => {
                     id
                 </th>
                 <th>
-                    Имя пользователя
+                    Наименование
                 </th>
                 <th>
-                    Имя
+                    Описание
                 </th>
                 <th>
-                    Фамилия
+                    Ссылка на репозиторий
                 </th>
                 <th>
-                    email
+                    Статус
+                </th>
+                <th>
+                    Дедлайн
+                </th>
+                <th>
+                    Время создания
+                </th>
+                <th>
+                    Время обновления
+                </th>
+                <th>
+                    Участники
                 </th>
             </tr>
             </thead>
             <tbody>
-            {users.map((user) => <UserItem user={user} key={user.id}/>)}
+            {projects.map((project) => <ProjectItem project={project} key={project.id}/>)}
             </tbody>
         </table>
     )
 }
 
-export default UserList;
+export default ProjectList;
