@@ -9,7 +9,6 @@ class ProjectModelSerializer(serializers.ModelSerializer):
     create_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     update_timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
-
     class Meta:
         model = Project
         fields = '__all__'
@@ -21,4 +20,5 @@ class ToDoModelSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ToDo
+        # fields = '__all__'
         exclude = ('is_active',)
