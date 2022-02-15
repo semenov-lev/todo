@@ -19,12 +19,12 @@ from rest_framework.routers import DefaultRouter
 
 
 from projectsapp.views import ProjectModelViewSet, ToDoModelViewSet
-from usersapp.views import UserModelViewSet
+from usersapp.views import UserViewSet
 
 router = DefaultRouter()
-router.register('users', UserModelViewSet)
+router.register('users', UserViewSet)
 router.register('projects', ProjectModelViewSet)
-router.register('todo', ToDoModelViewSet)
+router.register('todos', ToDoModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

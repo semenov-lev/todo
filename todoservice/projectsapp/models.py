@@ -25,6 +25,9 @@ class Project(models.Model):
     create_timestamp = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
     update_timestamp = models.DateTimeField(verbose_name='Дата обновления', auto_now=True)
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return self.name
 
@@ -37,6 +40,9 @@ class ToDo(models.Model):
     create_timestamp = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
     update_timestamp = models.DateTimeField(verbose_name='Дата обновления', auto_now=True)
     is_active = models.BooleanField(verbose_name='Активно', default=True)
+
+    class Meta:
+        ordering = ['id']
 
     def __str__(self):
         return self.name

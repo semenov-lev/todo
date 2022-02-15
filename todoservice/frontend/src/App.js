@@ -13,7 +13,7 @@ import Footer from "./components/Footer";
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const USERS_URL = 'users/'
 const PROJECTS_URL = 'projects/'
-const TODO_URL = 'todo/'
+const TODO_URL = 'todos/'
 const getUrl = (url) => {
     return `${DOMAIN}${url}`
 }
