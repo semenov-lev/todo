@@ -9,11 +9,12 @@ import TodosList from "./components/Todos";
 import axios from "axios";
 import NavigationBar from "./components/Navigation";
 import Footer from "./components/Footer";
+import {HashRouter, Route} from "react-router-dom";
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const USERS_URL = 'users/'
 const PROJECTS_URL = 'projects/'
-const TODO_URL = 'todos/'
+const TODOS_URL = 'todos/'
 const getUrl = (url) => {
     return `${DOMAIN}${url}`
 }
@@ -45,7 +46,7 @@ class App extends React.Component {
             })
         }).catch(error => console.log(error))
 
-        axios.get(getUrl(TODO_URL)).then(response => {
+        axios.get(getUrl(TODOS_URL)).then(response => {
             const todos = response.data
             this.setState({
                 'todos': todos,
@@ -60,9 +61,15 @@ class App extends React.Component {
                     <NavigationBar/>
                 </div>
                 <div className={'context'}>
-                    <UserList users={this.state.users}/>
-                    <ProjectList projects={this.state.projects}/>
-                    <TodosList todos={this.state.todos}/>
+                    <h1 className="sub-menu h1">Здесь пока ничего нет</h1>
+                    <HashRouter>
+                        <Route exact path USERS_URL component={() => <UserList users={this.state.users}/>}/>
+                        <Route exact path PROJECTS_URL component={() => <ProjectList projects={this.state.projects}/>}/>
+                        <Route exact path TODOS_URL component={() => <TodosList todos={this.state.todos}/>}/>
+                    </HashRouter>
+                    {/*<UserList users={this.state.users}/>*/}
+                    {/*<ProjectList projects={this.state.projects}/>*/}
+                    {/*<TodosList todos={this.state.todos}/>*/}
                 </div>
                 <div className={'footer'}>
                     <Footer/>

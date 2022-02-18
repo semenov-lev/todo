@@ -37,7 +37,7 @@ const ProjectItem = ({project}) => {
             </td>
             <td>
                 <ul>
-                   {project.users.map((user) => <UsersList user={user} key={user}/>)}
+                   {/*{project.users.map((user) => <UsersList user={user} key={user}/>)}*/}
                 </ul>
             </td>
         </tr>

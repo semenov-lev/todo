@@ -53,7 +53,7 @@ const TodosList = ({todos}) => {
             </tr>
             </thead>
             <tbody>
-            {todos.map((todo) => <TodoItem todo={todo} key={todo.name}/>)}
+            {/*{todos.map((todo) => <TodoItem todo={todo} key={todo.name}/>)}*/}
             </tbody>
         </table>
     )

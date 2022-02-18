@@ -1,4 +1,5 @@
 import React from "react";
+import {HashRouter, Route} from "react-router-dom";
 
 const NavigationBar = () => {
     return (
@@ -9,10 +10,10 @@ const NavigationBar = () => {
                 </div>
                 <div className="link-box">
                     <ul className="nav-link-custom">
-                        <li className="active list-inline-item"><a href="#">USERS</a></li>
-                        <li className="list-inline-item"><a href="#">LINK 1</a></li>
-                        <li className="list-inline-item"><a href="#">LINK 2</a></li>
-                        <li className="list-inline-item"><a href="#">LINK 3</a></li>
+                            <li className="active list-inline-item"><a href="#">USERS</a></li>
+                            <li className="list-inline-item"><a href="#">LINK 1</a></li>
+                            <li className="list-inline-item"><a href="#">LINK 2</a></li>
+                            <li className="list-inline-item"><a href="#">LINK 3</a></li>
                     </ul>
                 </div>
             </div>
