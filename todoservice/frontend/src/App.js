@@ -1,15 +1,16 @@
-import './components/css/Navigation.css';
-import './components/css/Footer.css'
-import './components/css/Users.css'
-import './App.css';
 import React from "react";
-import UserList from "./components/Users";
-import ProjectList from "./components/Projects";
-import TodosList from "./components/Todos";
 import axios from "axios";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+
+import './App.css';
+import WelcomePage from "./components/Welcome";
+import UsersPage from "./components/Users";
 import NavigationBar from "./components/Navigation";
 import Footer from "./components/Footer";
-import {HashRouter, Route} from "react-router-dom";
+import NotFound404 from "./components/Page404";
+import ProjectsPage from "./components/Projects";
+import TodosPage from "./components/Todos";
+
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
 const USERS_URL = 'users/'
@@ -24,7 +25,6 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'page': 'menu',
             'users': [],
             'projects': [],
             'todos': [],
@@ -57,23 +57,23 @@ class App extends React.Component {
     render() {
         return (
             <>
-                <div className={'navigation-bar'}>
-                    <NavigationBar/>
-                </div>
-                <div className={'context'}>
-                    <h1 className="sub-menu h1">Здесь пока ничего нет</h1>
-                    <HashRouter>
-                        <Route exact path USERS_URL component={() => <UserList users={this.state.users}/>}/>
-                        <Route exact path PROJECTS_URL component={() => <ProjectList projects={this.state.projects}/>}/>
-                        <Route exact path TODOS_URL component={() => <TodosList todos={this.state.todos}/>}/>
-                    </HashRouter>
-                    {/*<UserList users={this.state.users}/>*/}
-                    {/*<ProjectList projects={this.state.projects}/>*/}
-                    {/*<TodosList todos={this.state.todos}/>*/}
-                </div>
-                <div className={'footer'}>
-                    <Footer/>
-                </div>
+                <BrowserRouter forceRefresh={false}>
+                    <div className={'navigation-bar'}>
+                        <NavigationBar/>
+                    </div>
+                    <div className={'context'}>
+                        <Routes>
+                            <Route path='/' element={<WelcomePage/>}/>
+                            <Route path='/users' element={<UsersPage page={this.state.users}/>}/>
+                            <Route path='/projects' element={<ProjectsPage page={this.state.projects}/>}/>
+                            <Route path='/todos' element={<TodosPage page={this.state.todos}/>}/>
+                            <Route path='*' element={<NotFound404/>}/>
+                        </Routes>
+                    </div>
+                    <div className={'footer'}>
+                        <Footer/>
+                    </div>
+                </BrowserRouter>
             </>
         )
     }

@@ -53,10 +53,26 @@ const TodosList = ({todos}) => {
             </tr>
             </thead>
             <tbody>
-            {/*{todos.map((todo) => <TodoItem todo={todo} key={todo.name}/>)}*/}
+            {todos.map((todo) => <TodoItem todo={todo} key={todo.name}/>)}
             </tbody>
         </table>
     )
 }
 
-export default TodosList;
+
+const TodosPage = ({page}) => {
+    if (Object.keys(page).length > 0) {
+        localStorage.setItem('todos_page', JSON.stringify(page))
+    } else {
+        page = JSON.parse(localStorage.getItem('todos_page'))
+    }
+    return (
+        <div>
+            <h1>Количество записей: {page.count}</h1>
+            <TodosList todos={page.results}/>
+        </div>
+    )
+}
+
+
+export default TodosPage;

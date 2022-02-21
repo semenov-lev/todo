@@ -1,19 +1,20 @@
 import React from "react";
-import {HashRouter, Route} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
+import './css/Navigation.css';
+
 
 const NavigationBar = () => {
     return (
         <div className="navbar navbar-inverse">
             <div className="container">
                 <div className="navbar">
-                    <a className="navbar-brand" href="#">TO-DO</a>
+                    <Link className="navbar-brand" to='/'>TO-DO</Link>
                 </div>
                 <div className="link-box">
                     <ul className="nav-link-custom">
-                            <li className="active list-inline-item"><a href="#">USERS</a></li>
-                            <li className="list-inline-item"><a href="#">LINK 1</a></li>
-                            <li className="list-inline-item"><a href="#">LINK 2</a></li>
-                            <li className="list-inline-item"><a href="#">LINK 3</a></li>
+                        <li className="list-inline-item"><NavLink to='/users'>USERS</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/projects'>PROJECTS</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/todos'>TODOS</NavLink></li>
                     </ul>
                 </div>
             </div>

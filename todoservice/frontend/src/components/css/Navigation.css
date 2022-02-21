@@ -32,6 +32,7 @@ a:hover, a:focus {
 
 .active {
   background: #ff7878;
+  padding: 15px;
 }
 
 .active > a {

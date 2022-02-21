@@ -1,4 +1,5 @@
 import React from "react";
+import './css/Users.css'
 
 
 const UserItem = ({user}) => {
@@ -47,10 +48,26 @@ const UserList = ({users}) => {
             </tr>
             </thead>
             <tbody>
-            {/*{users.map((user) => <UserItem user={user} key={user.id}/>)}*/}
+            {users.map((user) => <UserItem user={user} key={user.id}/>)}
             </tbody>
         </table>
     )
 }
 
-export default UserList;
+
+const UsersPage = ({page}) => {
+    if (Object.keys(page).length > 0) {
+        localStorage.setItem('users_page', JSON.stringify(page))
+    } else {
+        page = JSON.parse(localStorage.getItem('users_page'))
+    }
+    return (
+        <div>
+            <h1>Количество записей: {page.count}</h1>
+            <UserList users={page.results}/>
+        </div>
+    )
+}
+
+
+export default UsersPage;

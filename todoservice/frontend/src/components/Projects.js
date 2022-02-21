@@ -37,7 +37,7 @@ const ProjectItem = ({project}) => {
             </td>
             <td>
                 <ul>
-                   {/*{project.users.map((user) => <UsersList user={user} key={user}/>)}*/}
+                   {project.users.map((user) => <UsersList user={user} key={user}/>)}
                 </ul>
             </td>
         </tr>
@@ -86,4 +86,20 @@ const ProjectList = ({projects}) => {
     )
 }
 
-export default ProjectList;
+
+const ProjectsPage = ({page}) => {
+    if (Object.keys(page).length > 0) {
+        localStorage.setItem('projects_page', JSON.stringify(page))
+    } else {
+        page = JSON.parse(localStorage.getItem('projects_page'))
+    }
+    return (
+        <div>
+            <h1>Количество записей: {page.count}</h1>
+            <ProjectList projects={page.results}/>
+        </div>
+    )
+}
+
+
+export default ProjectsPage;
