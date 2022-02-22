@@ -1,18 +1,14 @@
-import React from "react";
-
-
-const UsersList = ({user}) => {
-    return(
-        <li>{user}</li>
-    )
-}
+import React, {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import axios from "axios";
 
 
 const ProjectItem = ({project}) => {
     return (
         <tr>
             <td>
-                {project.id}
+                {project.id}<br/>
+                <Link to={`/project/${project.id}`}>Просмотр</Link>
             </td>
             <td>
                 {project.name}
@@ -37,7 +33,7 @@ const ProjectItem = ({project}) => {
             </td>
             <td>
                 <ul>
-                   {project.users.map((user) => <UsersList user={user} key={user}/>)}
+                    {project.users.map((user) => <li key={user}>{user}</li>)}
                 </ul>
             </td>
         </tr>
@@ -45,7 +41,7 @@ const ProjectItem = ({project}) => {
 }
 
 
-const ProjectList = ({projects}) => {
+const ProjectsList = ({projects}) => {
     return (
         <table>
             <thead>
@@ -96,10 +92,34 @@ const ProjectsPage = ({page}) => {
     return (
         <div>
             <h1>Количество записей: {page.count}</h1>
-            <ProjectList projects={page.results}/>
+            <ProjectsList projects={page.results}/>
         </div>
     )
 }
 
 
+// const ProjectDetail = () => {
+//     const {id} = useParams();
+//     const [project, SetProject] = useState({});
+//     useEffect(() => {
+//         const fetch = async () => {
+//             try {
+//                 const {data} = await axios.get(`http://127.0.0.1:8000/api/projects/${id}/`);
+//                 SetProject(data);
+//             } catch (err) {
+//                 console.log(err);
+//             }
+//         };
+//         fetch();
+//     }, []);
+//     console.log(project)
+//     return (
+//         <div>
+//             <ProjectList projects={project}/>
+//         </div>
+//     )
+// }
+
+
+// export {ProjectsPage, ProjectDetail};
 export default ProjectsPage;

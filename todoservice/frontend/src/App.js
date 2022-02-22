@@ -9,6 +9,7 @@ import NavigationBar from "./components/Navigation";
 import Footer from "./components/Footer";
 import NotFound404 from "./components/Page404";
 import ProjectsPage from "./components/Projects";
+import ProjectDetail from "./components/Project";
 import TodosPage from "./components/Todos";
 
 
@@ -25,10 +26,18 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'users': [],
-            'projects': [],
-            'todos': [],
+            'users': {},
+            'projects': {},
+            'project': {},
+            'todos': {},
         }
+    }
+
+    getProject(id) {
+        axios.get(getUrl(`projects/${id}/`))
+            .then(response => {
+                this.setState({project: response.data})
+            }).catch(error => console.log(error))
     }
 
     componentDidMount() {
@@ -57,7 +66,7 @@ class App extends React.Component {
     render() {
         return (
             <>
-                <BrowserRouter forceRefresh={false}>
+                <BrowserRouter>
                     <div className={'navigation-bar'}>
                         <NavigationBar/>
                     </div>
@@ -66,6 +75,8 @@ class App extends React.Component {
                             <Route path='/' element={<WelcomePage/>}/>
                             <Route path='/users' element={<UsersPage page={this.state.users}/>}/>
                             <Route path='/projects' element={<ProjectsPage page={this.state.projects}/>}/>
+                            <Route path='/project/:id' element={<ProjectDetail getProject={(id) => this.getProject(id)}
+                                                                                project={this.state.project}/>}/>
                             <Route path='/todos' element={<TodosPage page={this.state.todos}/>}/>
                             <Route path='*' element={<NotFound404/>}/>
                         </Routes>
