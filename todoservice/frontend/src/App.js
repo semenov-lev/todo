@@ -18,6 +18,10 @@ const DOMAIN = 'http://127.0.0.1:8000/api/'
 const USERS_URL = 'users/'
 const PROJECTS_URL = 'projects/'
 const TODOS_URL = 'todos/'
+const TOKEN_URL = 'token/'
+const TOKEN_REFRESH_URL = 'token/refresh/'
+
+
 const getUrl = (url) => {
     return `${DOMAIN}${url}`
 }
@@ -39,6 +43,12 @@ class App extends React.Component {
             .then(response => {
                 this.setState({project: response.data})
             }).catch(error => console.log(error))
+    }
+
+    getToken(username, password) {
+        axios.post(getUrl(TOKEN_URL), {username: username, password: password}).then(response => {
+            console.log(response.data)
+        }).catch(error => alert('Неверный логин или пароль'))
     }
 
     componentDidMount() {
@@ -74,7 +84,8 @@ class App extends React.Component {
                     <div className={'context'}>
                         <Routes>
                             <Route path='/' element={<WelcomePage/>}/>
-                            <Route path='/login' element={<LoginForm/>}/>
+                            <Route path='/login' element={<LoginForm
+                                getToken={(username, password) => this.getToken(username, password)}/>}/>
                             <Route path='/users' element={<UsersPage page={this.state.users}/>}/>
                             <Route path='/projects' element={<ProjectsPage page={this.state.projects}/>}/>
                             <Route path='/project/:id' element={<ProjectDetail getProject={(id) => this.getProject(id)}
