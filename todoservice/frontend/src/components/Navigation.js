@@ -3,7 +3,7 @@ import {Link, NavLink} from "react-router-dom"
 import './css/Navigation.css'
 
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
     return (
         <div className="navbar navbar-inverse">
             <div className="container">
@@ -12,11 +12,14 @@ const NavigationBar = () => {
                 </div>
                 <div className="link-box">
                     <ul className="nav-link-custom">
-                        <li className="list-inline-item"><NavLink to='/login'>ВХОД</NavLink></li>
-                        <li className="list-inline-item"> </li>
-                        <li className="list-inline-item"><NavLink to='/users'>ПОЛЬЗОВАТЕЛИ</NavLink></li>
-                        <li className="list-inline-item"><NavLink to='/projects'>ПРОЕКТЫ</NavLink></li>
-                        <li className="list-inline-item"><NavLink to='/todos'>ЗАДАЧИ</NavLink></li>
+                        <li className="list-inline-item">
+                            {props.isAuthenticated() ?
+                                <button onClick={props.logOut}>Выйти из пользователя</button> :
+                                <NavLink to='/login'>Войти в аккаунт</NavLink>}
+                        </li>
+                        <li className="list-inline-item"><NavLink to='/users'>Пользователи</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/projects'>Проекты</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/todos'>Задачи</NavLink></li>
                     </ul>
                 </div>
             </div>

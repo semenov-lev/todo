@@ -1,6 +1,7 @@
 import React from "react"
 import axios from "axios"
 import {BrowserRouter, Route, Routes} from "react-router-dom"
+import Cookies from "universal-cookie"
 
 import './App.css'
 import WelcomePage from "./components/Welcome"
@@ -34,7 +35,8 @@ class App extends React.Component {
             users: {},
             projects: {},
             project: {},
-            todos: {}
+            todos: {},
+            token: ''
         }
     }
 
@@ -47,8 +49,29 @@ class App extends React.Component {
 
     getToken(username, password) {
         axios.post(getUrl(TOKEN_URL), {username: username, password: password}).then(response => {
-            console.log(response.data)
+            this.setToken(response.data['access'])
         }).catch(error => alert('Неверный логин или пароль'))
+        console.log(this.state.token)
+    }
+
+    setToken(token){
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState({token: token})
+    }
+
+    getTokenFromCookies(){
+    const cookies = new Cookies()
+    const token = cookies.get('token')
+    this.setState({token: token})
+    }
+
+    isAuthenticated(){
+        return this.state.token !== ''
+    }
+
+    logOut(){
+        this.setToken('')
     }
 
     componentDidMount() {
@@ -79,7 +102,7 @@ class App extends React.Component {
             <>
                 <BrowserRouter>
                     <div className={'navigation-bar'}>
-                        <NavigationBar/>
+                        <NavigationBar isAuthenticated={() => this.isAuthenticated()} logOut={() => this.logOut()}/>
                     </div>
                     <div className={'context'}>
                         <Routes>
