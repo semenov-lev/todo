@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 
 const TodoItem = ({todo}) => {
@@ -75,4 +75,4 @@ const TodosPage = ({page}) => {
 }
 
 
-export default TodosPage;
+export default TodosPage

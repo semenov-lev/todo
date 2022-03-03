@@ -86,4 +86,4 @@ const ProjectDetail = ({getProject, project}) => {
 }
 
 
-export default ProjectDetail;
+export default ProjectDetail

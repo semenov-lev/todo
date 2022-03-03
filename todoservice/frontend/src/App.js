@@ -1,16 +1,17 @@
-import React from "react";
-import axios from "axios";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import React from "react"
+import axios from "axios"
+import {BrowserRouter, Route, Routes} from "react-router-dom"
 
-import './App.css';
-import WelcomePage from "./components/Welcome";
-import UsersPage from "./components/Users";
-import NavigationBar from "./components/Navigation";
-import Footer from "./components/Footer";
-import NotFound404 from "./components/Page404";
-import ProjectsPage from "./components/Projects";
-import ProjectDetail from "./components/Project";
-import TodosPage from "./components/Todos";
+import './App.css'
+import WelcomePage from "./components/Welcome"
+import UsersPage from "./components/Users"
+import NavigationBar from "./components/Navigation"
+import Footer from "./components/Footer"
+import NotFound404 from "./components/Page404"
+import ProjectsPage from "./components/Projects"
+import ProjectDetail from "./components/Project"
+import TodosPage from "./components/Todos"
+import LoginForm from "./components/Login"
 
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
@@ -24,12 +25,12 @@ const getUrl = (url) => {
 
 class App extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
-            'users': {},
-            'projects': {},
-            'project': {},
-            'todos': {},
+            users: {},
+            projects: {},
+            project: {},
+            todos: {}
         }
     }
 
@@ -44,21 +45,21 @@ class App extends React.Component {
         axios.get(getUrl(USERS_URL)).then(response => {
             const users = response.data
             this.setState({
-                'users': users,
+                users: users,
             })
         }).catch(error => console.log(error))
 
         axios.get(getUrl(PROJECTS_URL)).then(response => {
             const projects = response.data
             this.setState({
-                'projects': projects,
+                projects: projects,
             })
         }).catch(error => console.log(error))
 
         axios.get(getUrl(TODOS_URL)).then(response => {
             const todos = response.data
             this.setState({
-                'todos': todos,
+                todos: todos,
             })
         }).catch(error => console.log(error))
     }
@@ -73,10 +74,11 @@ class App extends React.Component {
                     <div className={'context'}>
                         <Routes>
                             <Route path='/' element={<WelcomePage/>}/>
+                            <Route path='/login' element={<LoginForm/>}/>
                             <Route path='/users' element={<UsersPage page={this.state.users}/>}/>
                             <Route path='/projects' element={<ProjectsPage page={this.state.projects}/>}/>
                             <Route path='/project/:id' element={<ProjectDetail getProject={(id) => this.getProject(id)}
-                                                                                project={this.state.project}/>}/>
+                                                                               project={this.state.project}/>}/>
                             <Route path='/todos' element={<TodosPage page={this.state.todos}/>}/>
                             <Route path='*' element={<NotFound404/>}/>
                         </Routes>
@@ -90,4 +92,5 @@ class App extends React.Component {
     }
 }
 
-export default App;
+
+export default App

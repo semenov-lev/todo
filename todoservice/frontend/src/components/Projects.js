@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
-import axios from "axios";
+import React from "react"
+import {Link} from "react-router-dom"
 
 
 const ProjectItem = ({project}) => {
@@ -98,28 +97,4 @@ const ProjectsPage = ({page}) => {
 }
 
 
-// const ProjectDetail = () => {
-//     const {id} = useParams();
-//     const [project, SetProject] = useState({});
-//     useEffect(() => {
-//         const fetch = async () => {
-//             try {
-//                 const {data} = await axios.get(`http://127.0.0.1:8000/api/projects/${id}/`);
-//                 SetProject(data);
-//             } catch (err) {
-//                 console.log(err);
-//             }
-//         };
-//         fetch();
-//     }, []);
-//     console.log(project)
-//     return (
-//         <div>
-//             <ProjectList projects={project}/>
-//         </div>
-//     )
-// }
-
-
-// export {ProjectsPage, ProjectDetail};
-export default ProjectsPage;
+export default ProjectsPage

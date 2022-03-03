@@ -1,6 +1,6 @@
-import React from "react";
-import {Link, NavLink} from "react-router-dom";
-import './css/Navigation.css';
+import React from "react"
+import {Link, NavLink} from "react-router-dom"
+import './css/Navigation.css'
 
 
 const NavigationBar = () => {
@@ -12,9 +12,11 @@ const NavigationBar = () => {
                 </div>
                 <div className="link-box">
                     <ul className="nav-link-custom">
-                        <li className="list-inline-item"><NavLink to='/users'>USERS</NavLink></li>
-                        <li className="list-inline-item"><NavLink to='/projects'>PROJECTS</NavLink></li>
-                        <li className="list-inline-item"><NavLink to='/todos'>TODOS</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/login'>ВХОД</NavLink></li>
+                        <li className="list-inline-item"> </li>
+                        <li className="list-inline-item"><NavLink to='/users'>ПОЛЬЗОВАТЕЛИ</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/projects'>ПРОЕКТЫ</NavLink></li>
+                        <li className="list-inline-item"><NavLink to='/todos'>ЗАДАЧИ</NavLink></li>
                     </ul>
                 </div>
             </div>
@@ -22,4 +24,5 @@ const NavigationBar = () => {
     )
 }
 
-export default NavigationBar;
+
+export default NavigationBar

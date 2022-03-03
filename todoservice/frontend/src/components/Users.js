@@ -1,5 +1,4 @@
-import React from "react";
-import './css/Users.css'
+import React from "react"
 
 
 const UserItem = ({user}) => {
@@ -70,4 +69,4 @@ const UsersPage = ({page}) => {
 }
 
 
-export default UsersPage;
+export default UsersPage
