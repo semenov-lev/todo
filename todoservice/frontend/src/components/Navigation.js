@@ -1,9 +1,14 @@
 import React from "react"
-import {Link, NavLink} from "react-router-dom"
+import {Link, NavLink, useNavigate} from "react-router-dom"
 import './css/Navigation.css'
 
 
 const NavigationBar = (props) => {
+    let navigate = useNavigate()
+    const logOutRedirect = () => {
+        props.logOut()
+        navigate('/')
+    }
     return (
         <div className="navbar navbar-inverse">
             <div className="container">
@@ -14,7 +19,8 @@ const NavigationBar = (props) => {
                     <ul className="nav-link-custom">
                         <li className="list-inline-item">
                             {props.isAuthenticated() ?
-                                <button type='button' className="btn btn-secondary btn-lg" onClick={props.logOut}>Выйти
+                                <button type='button' className="btn btn-secondary btn-lg"
+                                        onClick={logOutRedirect}>Выйти
                                     из пользователя {props.username}</button> :
                                 <NavLink to='/login'>Войти в аккаунт</NavLink>}
                         </li>

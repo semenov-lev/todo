@@ -53,19 +53,19 @@ class App extends React.Component {
             this.setToken(response.data['access'])
         }).catch(error => alert('Неверный логин или пароль'))
         this.setState({username: username})
-        localStorage.setItem('username', JSON.stringify(username))
+        localStorage.setItem('username', username)
     }
 
     setToken(token) {
         const cookies = new Cookies()
         cookies.set('token', token)
-        this.setState({token: token})
+        this.setState({token: token}, () => this.loadData())
     }
 
     getTokenFromCookies() {
         const cookies = new Cookies()
         const token = cookies.get('token')
-        this.setState({token: token})
+        this.setState({token: token}, () => this.loadData())
     }
 
     isAuthenticated() {
@@ -74,36 +74,56 @@ class App extends React.Component {
 
     logOut() {
         this.setToken('')
+        localStorage.clear()
+    }
+
+    getHeaders() {
+        let headers = {
+            'content-type': 'application/json'
+        }
+        if (this.isAuthenticated()) {
+            headers['Authorization'] = 'Bearer ' + this.state.token
+        }
+        return headers
     }
 
     loadData() {
-        axios.get(getUrl(USERS_URL)).then(response => {
+        const headers = this.getHeaders()
+
+        axios.get(getUrl(USERS_URL), {headers}).then(response => {
             const users = response.data
             this.setState({
                 users: users,
             })
-        }).catch(error => console.log(error))
+        }).catch(error => {
+            console.log(error)
+            this.setState({users: {}})
+        })
 
-        axios.get(getUrl(PROJECTS_URL)).then(response => {
+        axios.get(getUrl(PROJECTS_URL), {headers}).then(response => {
             const projects = response.data
             this.setState({
                 projects: projects,
             })
-        }).catch(error => console.log(error))
+        }).catch(error => {
+            console.log(error)
+            this.setState({projects: {}})
+        })
 
-        axios.get(getUrl(TODOS_URL)).then(response => {
+        axios.get(getUrl(TODOS_URL), {headers}).then(response => {
             const todos = response.data
             this.setState({
                 todos: todos,
             })
-        }).catch(error => console.log(error))
-
-        this.setState({username: JSON.parse(localStorage.getItem('username'))})
+        }).catch(error => {
+            console.log(error)
+            this.setState({todos: {}})
+        })
     }
 
     componentDidMount() {
         this.getTokenFromCookies()
-        this.loadData()
+        this.setState({username: localStorage.getItem('username')})
     }
 
     render() {
@@ -116,14 +136,22 @@ class App extends React.Component {
                     </div>
                     <div className={'context'}>
                         <Routes>
-                            <Route path='/' element={<WelcomePage/>}/>
+                            <Route path='/'
+                                   element={this.isAuthenticated() ? <WelcomePage/> : <Navigate to="/login"/>}/>
                             <Route path='/login' element={this.isAuthenticated() ? <Navigate to="/"/> : <LoginForm
                                 getAuthData={(username, password) => this.getAuthData(username, password)}/>}/>
-                            <Route path='/users' element={<UsersPage page={this.state.users}/>}/>
-                            <Route path='/projects' element={<ProjectsPage page={this.state.projects}/>}/>
-                            <Route path='/project/:id' element={<ProjectDetail getProject={(id) => this.getProject(id)}
-                                                                               project={this.state.project}/>}/>
-                            <Route path='/todos' element={<TodosPage page={this.state.todos}/>}/>
+                            <Route path='/users'
+                                   element={this.isAuthenticated() ? <UsersPage page={this.state.users}/> :
+                                       <Navigate to="/login"/>}/>
+                            <Route path='/projects'
+                                   element={this.isAuthenticated() ? <ProjectsPage page={this.state.projects}/> :
+                                       <Navigate to="/login"/>}/>
+                            <Route path='/project/:id' element={this.isAuthenticated() ?
+                                <ProjectDetail getProject={(id) => this.getProject(id)}
+                                               project={this.state.project}/> : <Navigate to="/login"/>}/>
+                            <Route path='/todos'
+                                   element={this.isAuthenticated() ? <TodosPage page={this.state.todos}/> :
+                                       <Navigate to="/login"/>}/>
                             <Route path='*' element={<NotFound404/>}/>
                         </Routes>
                     </div>
