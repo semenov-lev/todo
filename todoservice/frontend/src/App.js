@@ -1,6 +1,6 @@
 import React from "react"
 import axios from "axios"
-import {BrowserRouter, Route, Routes} from "react-router-dom"
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom"
 import Cookies from "universal-cookie"
 
 import './App.css'
@@ -20,7 +20,7 @@ const USERS_URL = 'users/'
 const PROJECTS_URL = 'projects/'
 const TODOS_URL = 'todos/'
 const TOKEN_URL = 'token/'
-const TOKEN_REFRESH_URL = 'token/refresh/'
+// const TOKEN_REFRESH_URL = 'token/refresh/'
 
 
 const getUrl = (url) => {
@@ -36,7 +36,8 @@ class App extends React.Component {
             projects: {},
             project: {},
             todos: {},
-            token: ''
+            token: '',
+            username: '',
         }
     }
 
@@ -47,34 +48,35 @@ class App extends React.Component {
             }).catch(error => console.log(error))
     }
 
-    getToken(username, password) {
+    getAuthData(username, password) {
         axios.post(getUrl(TOKEN_URL), {username: username, password: password}).then(response => {
             this.setToken(response.data['access'])
         }).catch(error => alert('Неверный логин или пароль'))
-        console.log(this.state.token)
+        this.setState({username: username})
+        localStorage.setItem('username', JSON.stringify(username))
     }
 
-    setToken(token){
+    setToken(token) {
         const cookies = new Cookies()
         cookies.set('token', token)
         this.setState({token: token})
     }
 
-    getTokenFromCookies(){
-    const cookies = new Cookies()
-    const token = cookies.get('token')
-    this.setState({token: token})
+    getTokenFromCookies() {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({token: token})
     }
 
-    isAuthenticated(){
+    isAuthenticated() {
         return this.state.token !== ''
     }
 
-    logOut(){
+    logOut() {
         this.setToken('')
     }
 
-    componentDidMount() {
+    loadData() {
         axios.get(getUrl(USERS_URL)).then(response => {
             const users = response.data
             this.setState({
@@ -95,6 +97,13 @@ class App extends React.Component {
                 todos: todos,
             })
         }).catch(error => console.log(error))
+
+        this.setState({username: JSON.parse(localStorage.getItem('username'))})
+    }
+
+    componentDidMount() {
+        this.getTokenFromCookies()
+        this.loadData()
     }
 
     render() {
@@ -102,13 +111,14 @@ class App extends React.Component {
             <>
                 <BrowserRouter>
                     <div className={'navigation-bar'}>
-                        <NavigationBar isAuthenticated={() => this.isAuthenticated()} logOut={() => this.logOut()}/>
+                        <NavigationBar isAuthenticated={() => this.isAuthenticated()} logOut={() => this.logOut()}
+                                       username={this.state.username}/>
                     </div>
                     <div className={'context'}>
                         <Routes>
                             <Route path='/' element={<WelcomePage/>}/>
-                            <Route path='/login' element={<LoginForm
-                                getToken={(username, password) => this.getToken(username, password)}/>}/>
+                            <Route path='/login' element={this.isAuthenticated() ? <Navigate to="/"/> : <LoginForm
+                                getAuthData={(username, password) => this.getAuthData(username, password)}/>}/>
                             <Route path='/users' element={<UsersPage page={this.state.users}/>}/>
                             <Route path='/projects' element={<ProjectsPage page={this.state.projects}/>}/>
                             <Route path='/project/:id' element={<ProjectDetail getProject={(id) => this.getProject(id)}

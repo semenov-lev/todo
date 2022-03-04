@@ -14,7 +14,8 @@ const NavigationBar = (props) => {
                     <ul className="nav-link-custom">
                         <li className="list-inline-item">
                             {props.isAuthenticated() ?
-                                <button onClick={props.logOut}>Выйти из пользователя</button> :
+                                <button type='button' className="btn btn-secondary btn-lg" onClick={props.logOut}>Выйти
+                                    из пользователя {props.username}</button> :
                                 <NavLink to='/login'>Войти в аккаунт</NavLink>}
                         </li>
                         <li className="list-inline-item"><NavLink to='/users'>Пользователи</NavLink></li>

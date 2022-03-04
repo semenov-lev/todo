@@ -11,7 +11,7 @@ class LoginForm extends React.Component {
     }
 
     handleSubmit(event) {
-        this.props.getToken(this.state.login, this.state.password)
+        this.props.getAuthData(this.state.login, this.state.password)
         event.preventDefault()
     }
 
@@ -47,14 +47,14 @@ class LoginForm extends React.Component {
                                                    onChange={(event) => this.handleChange(event)}/>
                                             <label className="form-label" htmlFor="typePasswordX">Пароль</label>
                                         </div>
-                                        <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="">Забыли
+                                        <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="/">Забыли
                                             пароль?</a></p>
                                         <button className="btn btn-outline-light btn-lg px-5" type="submit">Войти
                                         </button>
                                     </form>
                                 </div>
                                 <div>
-                                    <p className="mb-0">Нет аккаунта? <a href=""
+                                    <p className="mb-0">Нет аккаунта? <a href="/"
                                                                          className="text-white-50 fw-bold">Зарегистрироваться</a>
                                     </p>
                                 </div>
