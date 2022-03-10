@@ -22,7 +22,7 @@ class ProjectModelSerializerBase(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ToDoModelSerializer(serializers.HyperlinkedModelSerializer):
+class ToDoModelSerializer(serializers.ModelSerializer):
     create_timestamp = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
     update_timestamp = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
 
@@ -31,7 +31,7 @@ class ToDoModelSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class ToDoModelSerializerBase(serializers.HyperlinkedModelSerializer):
+class ToDoModelSerializerBase(serializers.ModelSerializer):
 
     class Meta:
         model = ToDo

@@ -5,7 +5,10 @@ const TodoItem = ({todo}) => {
     return (
         <tr>
             <td>
-                <a href={todo.url}>{todo.name}</a>
+                {todo.id}
+            </td>
+            <td>
+                {todo.name}
             </td>
             <td>
                 {todo.description}
@@ -17,10 +20,10 @@ const TodoItem = ({todo}) => {
                 {todo.update_timestamp}
             </td>
             <td>
-                <a href={todo.created_by}>{todo.created_by}</a>
+                {todo.created_by}
             </td>
             <td>
-                <a href={todo.project}>{todo.project}</a>
+                {todo.project}
             </td>
         </tr>
     )
@@ -32,6 +35,9 @@ const TodosList = ({todos}) => {
         <table>
             <thead>
             <tr>
+                <th>
+                    ID
+                </th>
                 <th>
                     Название
                 </th>
@@ -45,10 +51,10 @@ const TodosList = ({todos}) => {
                     Дата обновления
                 </th>
                 <th>
-                    Автор
+                    id Автора
                 </th>
                 <th>
-                    Проект
+                    id Проекта
                 </th>
             </tr>
             </thead>
