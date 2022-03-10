@@ -1,7 +1,9 @@
 from django.core.management.base import BaseCommand
 from mixer.backend.django import mixer
+from django.contrib.auth.hashers import make_password
 
 from projectsapp.models import Project, ToDo
+from usersapp.models import User
 
 
 class Command(BaseCommand):
@@ -14,9 +16,10 @@ class Command(BaseCommand):
 
         Project.objects.all().delete()
         ToDo.objects.all().delete()
+        User.objects.all().delete()
+
+        User.objects.create_superuser('lev', 'lev@mail.local', 'django')
 
         for i in range(count - 1):
-            mixer.blend(Project)
-            for ii in range(2):
-                mixer.blend(ToDo, is_active=True)
+            mixer.blend(ToDo, created_by__password=lambda: make_password('test'), is_active=True)
         print('Done')

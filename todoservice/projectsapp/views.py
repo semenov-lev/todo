@@ -6,7 +6,8 @@ from django_filters import rest_framework as filters
 
 from projectsapp.filters import ToDosFilter
 from projectsapp.models import Project, ToDo
-from projectsapp.serializers import ProjectModelSerializer, ToDoModelSerializer
+from projectsapp.serializers import ProjectModelSerializer, ProjectModelSerializerBase, ToDoModelSerializer, \
+    ToDoModelSerializerBase
 
 
 class ProjectLimitOffsetPagination(LimitOffsetPagination):
@@ -15,7 +16,6 @@ class ProjectLimitOffsetPagination(LimitOffsetPagination):
 
 class ProjectModelViewSet(ModelViewSet):
     queryset = Project.objects.all()
-    serializer_class = ProjectModelSerializer
     pagination_class = ProjectLimitOffsetPagination
 
     def get_queryset(self):
@@ -24,6 +24,11 @@ class ProjectModelViewSet(ModelViewSet):
         if name:
             projects = projects.filter(name__contains=name)
         return projects
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return ProjectModelSerializer
+        return ProjectModelSerializerBase
 
 
 class ToDoLimitOffsetPagination(LimitOffsetPagination):
@@ -44,3 +49,8 @@ class ToDoModelViewSet(ModelViewSet):
     def perform_destroy(self, instance):
         instance.is_active = False
         instance.save()
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return ToDoModelSerializer
+        return ToDoModelSerializerBase
