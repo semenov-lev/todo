@@ -37,7 +37,6 @@ class ToDoLimitOffsetPagination(LimitOffsetPagination):
 
 class ToDoModelViewSet(ModelViewSet):
     queryset = ToDo.objects.all()
-    serializer_class = ToDoModelSerializer
     pagination_class = ToDoLimitOffsetPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ToDosFilter
