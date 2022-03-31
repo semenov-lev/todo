@@ -2,6 +2,7 @@ import React from "react"
 import axios from "axios"
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom"
 import Cookies from "universal-cookie"
+import jwt_decode from "jwt-decode"
 
 import './App.css'
 import WelcomePage from "./components/Welcome"
@@ -77,11 +78,27 @@ class App extends React.Component {
     getTokenFromCookies() {
         const cookies = new Cookies()
         const token = cookies.get('token')
+        if (this.isAuthenticated() && !this.isTokenAlive(token)){
+            this.refreshToken(token)
+        }
         this.setState({token: token}, () => this.loadData())
     }
 
     isAuthenticated() {
         return this.state.token !== ''
+    }
+
+    isTokenAlive(token) {
+        let decoded_token = jwt_decode(token)
+        console.log('Decoded Token', decoded_token)
+        let current_date = new Date()
+        if (decoded_token.exp * 1000 < current_date.getTime()) {
+            console.log('Login is expired')
+            return false
+        } else {
+            console.log('Login is alive')
+            return true
+        }
     }
 
     logOut() {
@@ -91,15 +108,12 @@ class App extends React.Component {
 
     getHeaders() {
         let headers = {
-            'content-type': 'application/json',
-            'Authorization': 'Bearer ' + this.state.token
+            'content-type': 'application/json'
         }
-        axios.get(DOMAIN, {headers}).then(response => {
-            if (response.status === '403') {
-                this.refreshToken()
-                headers['Authorization'] = 'Bearer ' + this.state.token
-            }
-        })
+
+        if (this.isAuthenticated()) {
+            headers['Authorization'] = 'Bearer ' + this.state.token
+        }
         return headers
     }
 
