@@ -31,6 +31,7 @@ const TodoItem = ({todo}) => {
 
 
 const TodosList = ({todos}) => {
+    todos = todos ? todos : []
     return (
         <table>
             <thead>
@@ -67,11 +68,6 @@ const TodosList = ({todos}) => {
 
 
 const TodosPage = ({page}) => {
-    if (Object.keys(page).length > 0) {
-        localStorage.setItem('todos_page', JSON.stringify(page))
-    } else {
-        page = JSON.parse(localStorage.getItem('todos_page'))
-    }
     return (
         <div>
             <h1>Количество записей: {page.count}</h1>

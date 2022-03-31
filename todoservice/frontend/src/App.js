@@ -20,7 +20,7 @@ const USERS_URL = 'users/'
 const PROJECTS_URL = 'projects/'
 const TODOS_URL = 'todos/'
 const TOKEN_URL = 'token/'
-// const TOKEN_REFRESH_URL = 'token/refresh/'
+const TOKEN_REFRESH_URL = 'token/refresh/'
 
 
 const getUrl = (url) => {
@@ -37,12 +37,14 @@ class App extends React.Component {
             project: {},
             todos: {},
             token: '',
+            refresh: '',
             username: '',
         }
     }
 
     getProject(id) {
-        axios.get(getUrl(`projects/${id}/`))
+        const headers = this.getHeaders()
+        axios.get(getUrl(`projects/${id}/`), {headers})
             .then(response => {
                 this.setState({project: response.data})
             }).catch(error => console.log(error))
@@ -50,16 +52,26 @@ class App extends React.Component {
 
     getAuthData(username, password) {
         axios.post(getUrl(TOKEN_URL), {username: username, password: password}).then(response => {
-            this.setToken(response.data['access'])
+            this.setTokenData(response.data['access'], response.data['refresh'])
         }).catch(error => alert('Неверный логин или пароль'))
         this.setState({username: username})
         localStorage.setItem('username', username)
     }
 
-    setToken(token) {
+    setTokenData(token, refresh = null) {
         const cookies = new Cookies()
         cookies.set('token', token)
+        if (refresh) {
+            cookies.set('refresh', refresh)
+            this.setState({refresh: refresh})
+        }
         this.setState({token: token}, () => this.loadData())
+    }
+
+    refreshToken() {
+        axios.post(getUrl(TOKEN_REFRESH_URL), {refresh: this.state.refresh}).then(response => {
+            this.setTokenData(response.data['token'])
+        })
     }
 
     getTokenFromCookies() {
@@ -73,17 +85,21 @@ class App extends React.Component {
     }
 
     logOut() {
-        this.setToken('')
+        this.setTokenData('', '')
         localStorage.clear()
     }
 
     getHeaders() {
         let headers = {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'Authorization': 'Bearer ' + this.state.token
         }
-        if (this.isAuthenticated()) {
-            headers['Authorization'] = 'Bearer ' + this.state.token
-        }
+        axios.get(DOMAIN, {headers}).then(response => {
+            if (response.status === '403') {
+                this.refreshToken()
+                headers['Authorization'] = 'Bearer ' + this.state.token
+            }
+        })
         return headers
     }
 
@@ -137,20 +153,26 @@ class App extends React.Component {
                     <div className={'context'}>
                         <Routes>
                             <Route path='/'
-                                   element={this.isAuthenticated() ? <WelcomePage/> : <Navigate to="/login"/>}/>
-                            <Route path='/login' element={this.isAuthenticated() ? <Navigate to="/"/> : <LoginForm
-                                getAuthData={(username, password) => this.getAuthData(username, password)}/>}/>
+                                   element={this.isAuthenticated() ? <WelcomePage/> :
+                                       <Navigate to="/login"/>}/>
+                            <Route path='/login'
+                                   element={this.isAuthenticated() ? <Navigate to="/"/> :
+                                       <LoginForm
+                                           getAuthData={(username, password) => this.getAuthData(username, password)}/>}/>
                             <Route path='/users'
-                                   element={this.isAuthenticated() ? <UsersPage page={this.state.users}/> :
+                                   element={this.isAuthenticated() ?
+                                       <UsersPage page={this.state.users}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='/projects'
-                                   element={this.isAuthenticated() ? <ProjectsPage page={this.state.projects}/> :
+                                   element={this.isAuthenticated() ?
+                                       <ProjectsPage page={this.state.projects}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='/project/:id' element={this.isAuthenticated() ?
                                 <ProjectDetail getProject={(id) => this.getProject(id)}
                                                project={this.state.project}/> : <Navigate to="/login"/>}/>
                             <Route path='/todos'
-                                   element={this.isAuthenticated() ? <TodosPage page={this.state.todos}/> :
+                                   element={this.isAuthenticated() ?
+                                       <TodosPage page={this.state.todos}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='*' element={<NotFound404/>}/>
                         </Routes>

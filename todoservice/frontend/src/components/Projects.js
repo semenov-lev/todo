@@ -41,6 +41,7 @@ const ProjectItem = ({project}) => {
 
 
 const ProjectsList = ({projects}) => {
+    projects = projects ? projects : []
     return (
         <table>
             <thead>
@@ -83,11 +84,6 @@ const ProjectsList = ({projects}) => {
 
 
 const ProjectsPage = ({page}) => {
-    if (Object.keys(page).length > 0) {
-        localStorage.setItem('projects_page', JSON.stringify(page))
-    } else {
-        page = JSON.parse(localStorage.getItem('projects_page'))
-    }
     return (
         <div>
             <h1>Количество записей: {page.count}</h1>
