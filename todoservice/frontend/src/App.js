@@ -22,7 +22,7 @@ const PROJECTS_URL = 'projects/'
 const TODOS_URL = 'todos/'
 const TOKEN_URL = 'token/'
 const TOKEN_REFRESH_URL = 'token/refresh/'
-
+const cookies = new Cookies()
 
 const getUrl = (url) => {
     return `${DOMAIN}${url}`
@@ -60,9 +60,8 @@ class App extends React.Component {
     }
 
     setTokenData(token, refresh = null) {
-        const cookies = new Cookies()
         cookies.set('token', token)
-        if (refresh) {
+        if (refresh !== null) {
             cookies.set('refresh', refresh)
             this.setState({refresh: refresh})
         }
@@ -70,34 +69,43 @@ class App extends React.Component {
     }
 
     refreshToken() {
-        axios.post(getUrl(TOKEN_REFRESH_URL), {refresh: this.state.refresh}).then(response => {
-            this.setTokenData(response.data['token'])
+        let refresh = this.state.refresh
+
+        axios.post(getUrl(TOKEN_REFRESH_URL), {refresh: refresh}).then(response => {
+            let token = response.data['access']
+            console.log(`New token: ${token}`)
+            this.setTokenData(token)
+        }).catch(error => {
+            console.log(error)
         })
     }
 
-    getTokenFromCookies() {
-        const cookies = new Cookies()
-        const token = cookies.get('token')
-        if (this.isAuthenticated() && !this.isTokenAlive(token)){
-            this.refreshToken(token)
-        }
-        this.setState({token: token}, () => this.loadData())
+    getDataFromCookies() {
+        this.setState({token: cookies.get('token'), refresh: cookies.get('refresh')}, () => {
+            console.log(`Current token: ${this.state.token ? this.state.token : "None"}`)
+            console.log(`Current refresh: ${this.state.refresh ? this.state.refresh : "None"}`)
+            this.tokenAliveCheck()
+        })
     }
 
     isAuthenticated() {
         return this.state.token !== ''
     }
 
-    isTokenAlive(token) {
-        let decoded_token = jwt_decode(token)
-        console.log('Decoded Token', decoded_token)
-        let current_date = new Date()
-        if (decoded_token.exp * 1000 < current_date.getTime()) {
-            console.log('Login is expired')
-            return false
-        } else {
-            console.log('Login is alive')
-            return true
+    tokenAliveCheck() {
+        let token = this.state.token
+
+        if (this.state.token) {
+            let decoded_token = jwt_decode(token)
+            let current_date = new Date()
+
+            if (decoded_token.exp * 1000 < current_date.getTime()) {
+                console.log('Token is expired')
+                this.refreshToken()
+            } else {
+                console.log('Token is alive')
+                this.loadData()
+            }
         }
     }
 
@@ -149,11 +157,12 @@ class App extends React.Component {
             console.log(error)
             this.setState({todos: {}})
         })
+
+        this.setState({username: localStorage.getItem('username')})
     }
 
     componentDidMount() {
-        this.getTokenFromCookies()
-        this.setState({username: localStorage.getItem('username')})
+        this.getDataFromCookies()
     }
 
     render() {

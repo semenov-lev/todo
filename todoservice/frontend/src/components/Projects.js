@@ -35,6 +35,9 @@ const ProjectItem = ({project}) => {
                     {project.users.map((user) => <li key={user}>{user}</li>)}
                 </ul>
             </td>
+            <td style={{textAlign: "center"}}>
+                <button className="btn btn-outline-danger btn-lg" onClick={null}>Удалить</button>
+            </td>
         </tr>
     )
 }
@@ -72,6 +75,8 @@ const ProjectsList = ({projects}) => {
                 </th>
                 <th>
                     Участники
+                </th>
+                <th>
                 </th>
             </tr>
             </thead>
