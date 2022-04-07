@@ -16,7 +16,7 @@ class ProjectLimitOffsetPagination(LimitOffsetPagination):
 
 class ProjectModelViewSet(ModelViewSet):
     queryset = Project.objects.all()
-    pagination_class = ProjectLimitOffsetPagination
+    # pagination_class = ProjectLimitOffsetPagination
 
     def get_queryset(self):
         name = self.request.query_params.get('name', '')
@@ -37,7 +37,7 @@ class ToDoLimitOffsetPagination(LimitOffsetPagination):
 
 class ToDoModelViewSet(ModelViewSet):
     queryset = ToDo.objects.all()
-    pagination_class = ToDoLimitOffsetPagination
+    # pagination_class = ToDoLimitOffsetPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ToDosFilter
 

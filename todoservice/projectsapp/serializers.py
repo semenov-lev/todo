@@ -5,7 +5,7 @@ from .models import Project, ToDo
 class ProjectModelSerializer(serializers.ModelSerializer):
     status = serializers.CharField(source='get_status_display')
     users = serializers.StringRelatedField(many=True)
-    deadline_timestamp = serializers.DateTimeField()
+    deadline_timestamp = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
     create_timestamp = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
     update_timestamp = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
 
@@ -15,7 +15,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
 
 class ProjectModelSerializerBase(serializers.ModelSerializer):
-    deadline_timestamp = serializers.DateTimeField()
+    deadline_timestamp = serializers.DateTimeField(required=False)
 
     class Meta:
         model = Project

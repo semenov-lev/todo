@@ -2,7 +2,7 @@ import React from "react"
 import {Link} from "react-router-dom"
 
 
-const ProjectItem = ({project}) => {
+const ProjectItem = ({project, deleteButton}) => {
     return (
         <tr>
             <td>
@@ -16,13 +16,13 @@ const ProjectItem = ({project}) => {
                 {project.description}
             </td>
             <td>
-                <a href={project.rep_url}>Репозиторий</a>
+                <a style={{color: "black"}} href={project.rep_url}>{project.rep_url}</a>
             </td>
             <td>
                 {project.status}
             </td>
             <td>
-                {project.deadline_timestamp}
+                {project.deadline_timestamp ? project.deadline_timestamp : "Не назначен"}
             </td>
             <td>
                 {project.create_timestamp}
@@ -36,14 +36,16 @@ const ProjectItem = ({project}) => {
                 </ul>
             </td>
             <td style={{textAlign: "center"}}>
-                <button className="btn btn-outline-danger btn-lg" onClick={null}>Удалить</button>
+                <button type="button" className="btn btn-outline-danger btn-lg"
+                        onClick={() => deleteButton(project.id)}>Удалить
+                </button>
             </td>
         </tr>
     )
 }
 
 
-const ProjectsList = ({projects}) => {
+const ProjectsList = ({projects, deleteButton}) => {
     projects = projects ? projects : []
     return (
         <table>
@@ -81,21 +83,26 @@ const ProjectsList = ({projects}) => {
             </tr>
             </thead>
             <tbody>
-            {projects.map((project) => <ProjectItem project={project} key={project.id}/>)}
+            {projects.map((project) => <ProjectItem project={project} deleteButton={deleteButton} key={project.id}/>)}
             </tbody>
         </table>
     )
 }
 
 
-const ProjectsPage = ({page}) => {
+const ProjectsPage = ({page, deleteProject}) => {
     return (
         <div>
-            <h1>Количество записей: {page.count}</h1>
-            <ProjectsList projects={page.results}/>
+            <div className="d-flex justify-content-around align-items-center mt-3">
+                <h3>Количество проектов: {page.count}</h3>
+                <div className="alert alert-success" role="alert">
+                    <Link className="alert-link" to='/projects/create'>Создать новый проект</Link>
+                </div>
+            </div>
+            <ProjectsList projects={page.results} deleteButton={deleteProject}/>
         </div>
     )
 }
 
 
-export default ProjectsPage
+export default ProjectsPage;

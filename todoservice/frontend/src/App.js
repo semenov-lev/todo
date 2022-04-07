@@ -14,6 +14,7 @@ import ProjectsPage from "./components/Projects"
 import ProjectDetail from "./components/Project"
 import TodosPage from "./components/Todos"
 import LoginForm from "./components/Login"
+import ProjectForm from "./components/ProjectForm";
 
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
@@ -48,7 +49,42 @@ class App extends React.Component {
         axios.get(getUrl(`projects/${id}/`), {headers})
             .then(response => {
                 this.setState({project: response.data})
-            }).catch(error => console.log(error))
+            }).catch(error => {
+                console.log(error)
+                this.setState({project: {}})
+            }
+        )
+    }
+
+    deleteProject(id) {
+        const headers = this.getHeaders()
+        axios.delete(getUrl(`projects/${id}/`), {headers})
+            .then(response => {
+                this.loadData()
+            }).catch(error => {
+                console.log(error)
+                this.setState({projects: {}})
+            }
+        )
+    }
+
+    createProject(name, description, deadline_timestamp, users, rep_url) {
+        const headers = this.getHeaders()
+        const data = {
+            name: name,
+            description: description,
+            deadline_timestamp: deadline_timestamp,
+            users: users,
+            rep_url: rep_url
+        }
+        axios.post(getUrl(PROJECTS_URL), data, {headers}).then(response => {
+
+            this.loadData()
+        }).catch(error => {
+                console.log(error)
+                this.setState({projects: {}})
+            }
+        )
     }
 
     getAuthData(username, password) {
@@ -181,14 +217,29 @@ class App extends React.Component {
                             <Route path='/login'
                                    element={this.isAuthenticated() ? <Navigate to="/"/> :
                                        <LoginForm
-                                           getAuthData={(username, password) => this.getAuthData(username, password)}/>}/>
+                                           getAuthData={(username, password) =>
+                                               this.getAuthData(username, password)}/>}/>
                             <Route path='/users'
                                    element={this.isAuthenticated() ?
                                        <UsersPage page={this.state.users}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='/projects'
                                    element={this.isAuthenticated() ?
-                                       <ProjectsPage page={this.state.projects}/> :
+                                       <ProjectsPage page={this.state.projects}
+                                                     deleteProject={(id) => this.deleteProject(id)}/> :
+                                       <Navigate to="/login"/>}/>
+                            <Route path='/projects/create'
+                                   element={this.isAuthenticated() ?
+                                       <ProjectForm users={this.state.users.results}
+                                                    createProject={(name,
+                                                                    description,
+                                                                    deadline_timestamp,
+                                                                    users, rep_url
+                                                    ) => this.createProject(name,
+                                                        description,
+                                                        deadline_timestamp,
+                                                        users,
+                                                        rep_url)}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='/project/:id' element={this.isAuthenticated() ?
                                 <ProjectDetail getProject={(id) => this.getProject(id)}
