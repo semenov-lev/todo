@@ -3,6 +3,7 @@ import {Link} from "react-router-dom"
 
 
 const ProjectItem = ({project, deleteButton}) => {
+    let todos = project.todos ? project.todos : []
     return (
         <tr>
             <td>
@@ -29,6 +30,11 @@ const ProjectItem = ({project, deleteButton}) => {
             </td>
             <td>
                 {project.update_timestamp}
+            </td>
+            <td>
+                <ul>
+                    {todos.map((todo) => <li key={todo.name}>{todo.name}</li>)}
+                </ul>
             </td>
             <td>
                 <ul>
@@ -74,6 +80,9 @@ const ProjectsList = ({projects, deleteButton}) => {
                 </th>
                 <th>
                     Время обновления
+                </th>
+                <th>
+                    ToDo
                 </th>
                 <th>
                     Участники

@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 
 const ProjectTable = ({project}) => {
     let users = project.users ? project.users : []
+    let todos = project.todos ? project.todos : []
     return (
         <table>
             <thead>
@@ -31,6 +32,9 @@ const ProjectTable = ({project}) => {
                 </th>
                 <th>
                     Время обновления
+                </th>
+                <th>
+                    ToDo
                 </th>
                 <th>
                     Участники
@@ -65,6 +69,11 @@ const ProjectTable = ({project}) => {
                 </td>
                 <td>
                     <ul>
+                        {todos.map((todo) => <li key={todo.name}>{todo.name}</li>)}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
                         {users.map((user) => <li key={user}>{user}</li>)}
                     </ul>
                 </td>
@@ -75,9 +84,9 @@ const ProjectTable = ({project}) => {
 }
 
 
-const ProjectDetail = ({getProject, project}) => {
+const ProjectDetail = ({setCurrentProject, project}) => {
     let {id} = useParams();
-    getProject(id);
+    setCurrentProject(id)
     return (
         <div>
             <ProjectTable project={project}/>

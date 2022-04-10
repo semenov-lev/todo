@@ -37,23 +37,20 @@ class App extends React.Component {
             users: {},
             projects: {},
             project: {},
+            project_id: '',
             todos: {},
             token: '',
             refresh: '',
             username: '',
+            user_id: ''
         }
     }
 
-    getProject(id) {
-        const headers = this.getHeaders()
-        axios.get(getUrl(`projects/${id}/`), {headers})
-            .then(response => {
-                this.setState({project: response.data})
-            }).catch(error => {
-                console.log(error)
-                this.setState({project: {}})
-            }
-        )
+
+    setCurrentProject(id) {
+        if (this.state.project_id !== id) {
+            this.setState({project_id: id}, () => this.loadData())
+        }
     }
 
     deleteProject(id) {
@@ -78,11 +75,29 @@ class App extends React.Component {
             rep_url: rep_url
         }
         axios.post(getUrl(PROJECTS_URL), data, {headers}).then(response => {
-
             this.loadData()
+            alert("Успех!")
         }).catch(error => {
                 console.log(error)
-                this.setState({projects: {}})
+                alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
+            }
+        )
+    }
+
+    createToDo(name, description, created_by, project) {
+        const headers = this.getHeaders()
+        const data = {
+            name: name,
+            description: description,
+            created_by: created_by,
+            project: project
+        }
+        axios.post(getUrl(TODOS_URL), data, {headers}).then(response => {
+            this.loadData()
+            alert("Успех!")
+        }).catch(error => {
+                console.log(error)
+                alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
             }
         )
     }
@@ -125,7 +140,7 @@ class App extends React.Component {
     }
 
     isAuthenticated() {
-        return this.state.token !== ''
+        return this.state.token
     }
 
     tokenAliveCheck() {
@@ -194,7 +209,20 @@ class App extends React.Component {
             this.setState({todos: {}})
         })
 
-        this.setState({username: localStorage.getItem('username')})
+        if (this.state.project_id) {
+                    axios.get(getUrl(`projects/${this.state.project_id}/`), {headers}).then(response => {
+                        const project = response.data
+                        this.setState({project: project}, () => console.log("Обновилось состояние проекта"))
+            }).catch(error => {
+                console.log(error)
+                this.setState({project: {}})
+            })
+        }
+
+        this.setState({username: localStorage.getItem('username')},
+            () => this.state.username ?
+                this.setState({user_id: this.state.users.results.}) :
+                this.setState({user_id: null}))
     }
 
     componentDidMount() {
@@ -241,9 +269,25 @@ class App extends React.Component {
                                                         users,
                                                         rep_url)}/> :
                                        <Navigate to="/login"/>}/>
+
+                            <Route path='/todos/create/:id'
+                                   element={this.isAuthenticated() ?
+                                       <ProjectForm users={this.state.users.results}
+                                                    createToDo={(name,
+                                                                    description,
+                                                                    deadline_timestamp,
+                                                                    users, rep_url
+                                                    ) => this.createToDo(name,
+                                                        description,
+                                                        deadline_timestamp,
+                                                        users,
+                                                        rep_url)}/> :
+                                       <Navigate to="/login"/>}/>
+
                             <Route path='/project/:id' element={this.isAuthenticated() ?
-                                <ProjectDetail getProject={(id) => this.getProject(id)}
+                                <ProjectDetail setCurrentProject={(id) => this.setCurrentProject(id)}
                                                project={this.state.project}/> : <Navigate to="/login"/>}/>
+
                             <Route path='/todos'
                                    element={this.isAuthenticated() ?
                                        <TodosPage page={this.state.todos}/> :

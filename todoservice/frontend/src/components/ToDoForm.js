@@ -1,15 +1,14 @@
 import React from "react";
 
 
-class ProjectForm extends React.Component {
+class ToDoForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             name: '',
             description: '',
-            deadline_timestamp: '',
-            users: [],
-            rep_url: ''
+            created_by: '',
+            project: ''
         }
     }
 
@@ -22,31 +21,18 @@ class ProjectForm extends React.Component {
     }
 
     handleSubmit(event) {
-        this.props.createProject(
+        this.props.createToDo(
             this.state.name,
             this.state.description,
-            this.state.deadline_timestamp,
-            this.state.users,
-            this.state.rep_url)
+            this.state.created_by,
+            this.state.project)
         event.preventDefault()
-    }
-
-    handleSelectUsers(event) {
-        if (event.target.selectedOptions) {
-            let selected_users = []
-            for (let i = 0; i < event.target.selectedOptions.length; i++) {
-                selected_users.push(event.target.selectedOptions.item(i).value)
-            }
-            this.setState({users: selected_users})
-        } else {
-            this.setState({users: []})
-        }
     }
 
     render() {
         return (
             <div className="container py-5 h-50 card d-flex justify-content-center align-items-center">
-                <div className="card-header m-2"><h1>Создание нового проекта</h1></div>
+                <div className="card-header m-2"><h1>Создание новой заметки ToDo</h1></div>
                 <form className="form-group d-flex flex-column" onSubmit={(event) => this.handleSubmit(event)}>
                     <div className="d-flex justify-content-around">
                         <div className="d-flex flex-column m-2">
@@ -108,4 +94,4 @@ class ProjectForm extends React.Component {
     }
 }
 
-export default ProjectForm;
+export default ToDoForm;
