@@ -1,11 +1,13 @@
 import React from "react"
+import {Link} from "react-router-dom";
 
 
-const TodoItem = ({todo}) => {
+const TodoItem = ({todo, deleteButton}) => {
     return (
         <tr>
             <td>
-                {todo.id}
+                {todo.id}<br/>
+                <Link to={`/todo/${todo.id}`}>Просмотр</Link>
             </td>
             <td>
                 {todo.name}
@@ -25,12 +27,17 @@ const TodoItem = ({todo}) => {
             <td>
                 {todo.project}
             </td>
+            <td style={{textAlign: "center"}}>
+                <button type="button" className="btn btn-outline-danger btn-lg"
+                        onClick={() => deleteButton(todo.id)}>Удалить
+                </button>
+            </td>
         </tr>
     )
 }
 
 
-const TodosList = ({todos}) => {
+const TodosList = ({todos, deleteButton}) => {
     todos = todos ? todos : []
     return (
         <table>
@@ -57,24 +64,27 @@ const TodosList = ({todos}) => {
                 <th>
                     id Проекта
                 </th>
+                <th>
+                </th>
             </tr>
             </thead>
             <tbody>
-            {todos.map((todo) => <TodoItem todo={todo} key={todo.name}/>)}
+            {todos.map((todo) => <TodoItem todo={todo} key={todo.name} deleteButton={deleteButton}/>)}
             </tbody>
         </table>
     )
 }
 
 
-const TodosPage = ({page}) => {
+const TodosPage = ({page, deleteToDo}) => {
+    const todos = page.results.filter((todo) => todo.is_active === true)
     return (
         <div>
             <h1>Количество записей: {page.count}</h1>
-            <TodosList todos={page.results}/>
+            <TodosList todos={todos} deleteButton={deleteToDo}/>
         </div>
     )
 }
 
 
-export default TodosPage
+export default TodosPage;

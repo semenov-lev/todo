@@ -16,6 +16,7 @@ import TodosPage from "./components/Todos"
 import LoginForm from "./components/Login"
 import ProjectForm from "./components/ProjectForm";
 import ToDoForm from "./components/ToDoForm";
+import ToDoDetail from "./components/ToDo";
 
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
@@ -40,6 +41,8 @@ class App extends React.Component {
             project: {},
             project_id: '',
             todos: {},
+            todo: {},
+            todo_id: '',
             token: '',
             refresh: '',
             username: '',
@@ -54,14 +57,36 @@ class App extends React.Component {
         }
     }
 
+    setCurrentToDo(id) {
+        if (this.state.todo_id !== id) {
+            this.setState({todo_id: id}, () => this.loadData())
+        }
+    }
+
     deleteProject(id) {
         const headers = this.getHeaders()
         axios.delete(getUrl(`projects/${id}/`), {headers})
             .then(response => {
                 this.loadData()
+                alert("Успешно удалено!")
             }).catch(error => {
                 console.log(error)
+                alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
                 this.setState({projects: {}})
+            }
+        )
+    }
+
+    deleteToDo(id) {
+        const headers = this.getHeaders()
+        axios.delete(getUrl(`todos/${id}/`), {headers})
+            .then(response => {
+                this.loadData()
+                alert("Успешно удалено!")
+            }).catch(error => {
+                console.log(error)
+                alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
+                this.setState({todos: {}})
             }
         )
     }
@@ -77,7 +102,7 @@ class App extends React.Component {
         }
         axios.post(getUrl(PROJECTS_URL), data, {headers}).then(response => {
             this.loadData()
-            alert("Успех!")
+            alert("Успешно создано!")
         }).catch(error => {
                 console.log(error)
                 alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
@@ -95,7 +120,7 @@ class App extends React.Component {
         }
         axios.post(getUrl(TODOS_URL), data, {headers}).then(response => {
             this.loadData()
-            alert("Успех!")
+            alert("Успешно создано!")
         }).catch(error => {
                 console.log(error)
                 alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
@@ -186,8 +211,7 @@ class App extends React.Component {
                 }, () =>
                     this.setState({username: localStorage.getItem('username')},
                         () => this.state.username ?
-                            this.setState({user_id: this.state.users.results.filter(user => user.username === this.state.username)[0].id},
-                                () => console.log(`User id === ${this.state.user_id}`)) :
+                            this.setState({user_id: this.state.users.results.filter(user => user.username === this.state.username)[0].id}) :
                             this.setState({user_id: null}))
             )
         }).catch(error => {
@@ -224,6 +248,17 @@ class App extends React.Component {
                 this.setState({project: {}})
             })
         }
+
+        if (this.state.todo_id) {
+            axios.get(getUrl(`todos/${this.state.todo_id}/`), {headers}).then(response => {
+                const todo = response.data
+                this.setState({todo: todo}, () => console.log("Обновилось состояние заметки"))
+            }).catch(error => {
+                console.log(error)
+                this.setState({todo: {}})
+            })
+        }
+
     }
 
     componentDidMount() {
@@ -234,15 +269,15 @@ class App extends React.Component {
         const ToDoWrapper = (props) => {
             const params = useParams();
             return <ToDoForm user_id={this.state.user_id}
-                            createToDo={(name,
-                                         description,
-                                         created_by,
-                                         project
-                            ) => this.createToDo(name,
-                                description,
-                                created_by,
-                                project)}
-                            extra_props={params}/>
+                             createToDo={(name,
+                                          description,
+                                          created_by,
+                                          project
+                             ) => this.createToDo(name,
+                                 description,
+                                 created_by,
+                                 project)}
+                             extra_props={params}/>
         }
         return (
             <>
@@ -286,16 +321,21 @@ class App extends React.Component {
 
                             <Route path='/todos/create/:id'
                                    element={this.isAuthenticated() ?
-                                       <ToDoWrapper /> :
+                                       <ToDoWrapper/> :
                                        <Navigate to="/login"/>}/>
 
                             <Route path='/project/:id' element={this.isAuthenticated() ?
                                 <ProjectDetail setCurrentProject={(id) => this.setCurrentProject(id)}
                                                project={this.state.project}/> : <Navigate to="/login"/>}/>
 
+                            <Route path='/todo/:id' element={this.isAuthenticated() ?
+                                <ToDoDetail setCurrentToDo={(id) => this.setCurrentToDo(id)}
+                                            todo={this.state.todo}/> : <Navigate to="/login"/>}/>
+
                             <Route path='/todos'
                                    element={this.isAuthenticated() ?
-                                       <TodosPage page={this.state.todos}/> :
+                                       <TodosPage page={this.state.todos}
+                                                  deleteToDo={(id) => this.deleteToDo(id)}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='*' element={<NotFound404/>}/>
                         </Routes>

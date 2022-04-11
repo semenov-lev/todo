@@ -43,7 +43,7 @@ class ToDoModelViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         super(ToDoModelViewSet, self).destroy(request, *args, **kwargs)
-        return Response(status=status.HTTP_100_CONTINUE)
+        return Response(status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         instance.is_active = False
