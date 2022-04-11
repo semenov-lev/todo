@@ -99,7 +99,7 @@ const ProjectsList = ({projects, deleteButton}) => {
 }
 
 
-const ProjectsPage = ({page, deleteProject}) => {
+const ProjectsPage = ({page, deleteProject, handleChange, handleSubmit, search_field, handleCancel}) => {
     return (
         <div>
             <div className="d-flex justify-content-around align-items-center mt-3">
@@ -107,10 +107,29 @@ const ProjectsPage = ({page, deleteProject}) => {
                 <div className="alert alert-success" role="alert">
                     <Link className="alert-link" to='/projects/create'>Создать новый проект</Link>
                 </div>
+                <div>
+                    <form className="form-group d-flex align-items-stretch" onSubmit={(event) => handleSubmit(event)}>
+                        <div className="d-flex align-items-stretch">
+                            <label>
+                                Поиск по имени
+                                <input className="form-control"
+                                       type="text"
+                                       placeholder="Введите наименование проекта"
+                                       name="search_field"
+                                       value={search_field}
+                                       onChange={(event) => handleChange(event)}/>
+                            </label>
+                            <button className="btn btn-outline-info btn-default" type="submit">Поиск</button>
+                        </div>
+                        <div className="d-flex align-items-stretch">
+                            <button className="btn btn-outline-danger btn-sm" type="reset" onClick={(event) => handleCancel(event)}>Отменить</button>
+                        </div>
+                </form>
             </div>
-            <ProjectsList projects={page.results} deleteButton={deleteProject}/>
         </div>
-    )
+    <ProjectsList projects={page.results} deleteButton={deleteProject}/>
+</div>
+)
 }
 
 

@@ -61,7 +61,7 @@ class ToDoForm extends React.Component {
                                 <input className="form-control"
                                        type="text"
                                        readOnly
-                                       name="name"
+                                       name="id"
                                        value={this.state.created_by}
                                        onChange={(event) => this.handleChange(event)}/>
                             </label>
@@ -70,7 +70,7 @@ class ToDoForm extends React.Component {
                                 <input className="form-control"
                                        type="text"
                                        readOnly
-                                       name="name"
+                                       name="id"
                                        value={this.state.project}
                                        onChange={(event) => this.handleChange(event)}/>
                             </label>

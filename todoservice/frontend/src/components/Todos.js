@@ -80,7 +80,7 @@ const TodosPage = ({page, deleteToDo}) => {
     const todos = page.results.filter((todo) => todo.is_active === true)
     return (
         <div>
-            <h1>Количество записей: {page.count}</h1>
+            <h1>Количество заметок: {page.count}</h1>
             <TodosList todos={todos} deleteButton={deleteToDo}/>
         </div>
     )

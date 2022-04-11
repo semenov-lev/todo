@@ -46,10 +46,36 @@ class App extends React.Component {
             token: '',
             refresh: '',
             username: '',
-            user_id: ''
+            user_id: '',
+            search_field: ''
         }
     }
 
+    handleChange(event) {
+        this.setState(
+            {
+                search_field: event.target.value
+            }, () => console.log(event.target.value)
+        )
+    }
+
+    handleSubmit(event) {
+        // debugger
+        if (this.state.search_field) {
+            let project_page = this.state.projects
+            let filtered_projects = this.state.projects.results.filter((project) =>
+                project.name.toLowerCase().includes(this.state.search_field.toLowerCase()))
+            project_page.results = filtered_projects
+            this.setState({projects: project_page}, () => console.log("Успешно отфильтровалось"))
+            event.preventDefault();
+        }
+    }
+
+    handleCancel(event) {
+        this.loadData()
+        alert("Успешно отменено!")
+        event.preventDefault();
+    }
 
     setCurrentProject(id) {
         if (this.state.project_id !== id) {
@@ -303,6 +329,10 @@ class App extends React.Component {
                             <Route path='/projects'
                                    element={this.isAuthenticated() ?
                                        <ProjectsPage page={this.state.projects}
+                                                     handleChange={(event) => this.handleChange(event)}
+                                                     handleSubmit={(event) => this.handleSubmit(event)}
+                                                     search_field={this.state.search_field}
+                                                     handleCancel={(event) => this.handleCancel(event)}
                                                      deleteProject={(id) => this.deleteProject(id)}/> :
                                        <Navigate to="/login"/>}/>
                             <Route path='/projects/create'
