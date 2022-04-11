@@ -1,6 +1,6 @@
 import React from "react"
 import axios from "axios"
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom"
+import {BrowserRouter, Navigate, Route, Routes, useParams} from "react-router-dom"
 import Cookies from "universal-cookie"
 import jwt_decode from "jwt-decode"
 
@@ -15,6 +15,7 @@ import ProjectDetail from "./components/Project"
 import TodosPage from "./components/Todos"
 import LoginForm from "./components/Login"
 import ProjectForm from "./components/ProjectForm";
+import ToDoForm from "./components/ToDoForm";
 
 
 const DOMAIN = 'http://127.0.0.1:8000/api/'
@@ -106,8 +107,7 @@ class App extends React.Component {
         axios.post(getUrl(TOKEN_URL), {username: username, password: password}).then(response => {
             this.setTokenData(response.data['access'], response.data['refresh'])
         }).catch(error => alert('Неверный логин или пароль'))
-        this.setState({username: username})
-        localStorage.setItem('username', username)
+        this.setState({username: username}, () => localStorage.setItem('username', username))
     }
 
     setTokenData(token, refresh = null) {
@@ -182,8 +182,14 @@ class App extends React.Component {
         axios.get(getUrl(USERS_URL), {headers}).then(response => {
             const users = response.data
             this.setState({
-                users: users,
-            })
+                    users: users,
+                }, () =>
+                    this.setState({username: localStorage.getItem('username')},
+                        () => this.state.username ?
+                            this.setState({user_id: this.state.users.results.filter(user => user.username === this.state.username)[0].id},
+                                () => console.log(`User id === ${this.state.user_id}`)) :
+                            this.setState({user_id: null}))
+            )
         }).catch(error => {
             console.log(error)
             this.setState({users: {}})
@@ -210,19 +216,14 @@ class App extends React.Component {
         })
 
         if (this.state.project_id) {
-                    axios.get(getUrl(`projects/${this.state.project_id}/`), {headers}).then(response => {
-                        const project = response.data
-                        this.setState({project: project}, () => console.log("Обновилось состояние проекта"))
+            axios.get(getUrl(`projects/${this.state.project_id}/`), {headers}).then(response => {
+                const project = response.data
+                this.setState({project: project}, () => console.log("Обновилось состояние проекта"))
             }).catch(error => {
                 console.log(error)
                 this.setState({project: {}})
             })
         }
-
-        this.setState({username: localStorage.getItem('username')},
-            () => this.state.username ?
-                this.setState({user_id: this.state.users.results.}) :
-                this.setState({user_id: null}))
     }
 
     componentDidMount() {
@@ -230,6 +231,19 @@ class App extends React.Component {
     }
 
     render() {
+        const ToDoWrapper = (props) => {
+            const params = useParams();
+            return <ToDoForm user_id={this.state.user_id}
+                            createToDo={(name,
+                                         description,
+                                         created_by,
+                                         project
+                            ) => this.createToDo(name,
+                                description,
+                                created_by,
+                                project)}
+                            extra_props={params}/>
+        }
         return (
             <>
                 <BrowserRouter>
@@ -272,16 +286,7 @@ class App extends React.Component {
 
                             <Route path='/todos/create/:id'
                                    element={this.isAuthenticated() ?
-                                       <ProjectForm users={this.state.users.results}
-                                                    createToDo={(name,
-                                                                    description,
-                                                                    deadline_timestamp,
-                                                                    users, rep_url
-                                                    ) => this.createToDo(name,
-                                                        description,
-                                                        deadline_timestamp,
-                                                        users,
-                                                        rep_url)}/> :
+                                       <ToDoWrapper /> :
                                        <Navigate to="/login"/>}/>
 
                             <Route path='/project/:id' element={this.isAuthenticated() ?
@@ -305,4 +310,4 @@ class App extends React.Component {
 }
 
 
-export default App
+export default App;

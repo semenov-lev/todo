@@ -1,5 +1,5 @@
 import React from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 
 const ProjectTable = ({project}) => {
@@ -39,6 +39,8 @@ const ProjectTable = ({project}) => {
                 <th>
                     Участники
                 </th>
+                                <th>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -76,6 +78,9 @@ const ProjectTable = ({project}) => {
                     <ul>
                         {users.map((user) => <li key={user}>{user}</li>)}
                     </ul>
+                </td>
+                <td>
+                    <Link className="link-danger" to={`/todos/create/${project.id}`}>Создать заметку</Link>
                 </td>
             </tr>
             </tbody>

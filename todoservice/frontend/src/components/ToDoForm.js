@@ -7,8 +7,8 @@ class ToDoForm extends React.Component {
         this.state = {
             name: '',
             description: '',
-            created_by: '',
-            project: ''
+            created_by: this.props.user_id,
+            project: this.props.extra_props.id
         }
     }
 
@@ -47,15 +47,6 @@ class ToDoForm extends React.Component {
                             </label>
 
                             <label>
-                                Дата окончания
-                                <input className="form-control"
-                                       type="datetime-local"
-                                       name="deadline_timestamp"
-                                       value={this.state.deadline_timestamp}
-                                       onChange={(event) => this.handleChange(event)}/>
-                            </label>
-
-                            <label>
                                 Описание
                                 <textarea className="form-control"
                                           placeholder="Описание"
@@ -63,26 +54,25 @@ class ToDoForm extends React.Component {
                                           value={this.state.description}
                                           onChange={(event) => this.handleChange(event)}/>
                             </label>
-
-                            <label>
-                                Ссылка на репозиторий
-                                <input className="form-control"
-                                       type="url"
-                                       name="rep_url"
-                                       value={this.state.rep_url}
-                                       onChange={(event) => this.handleChange(event)}/>
-                            </label>
                         </div>
                         <div className="d-flex flex-column m-2">
-                            <label>
-                                Участники
-                                <select className="form-control"
-                                        name="users"
-                                        multiple
-                                        onChange={(event) => this.handleSelectUsers(event)}>
-                                    {this.props.users.map((user) => <option key={user.id}
-                                                                            value={user.id}>{user.username}</option>)}
-                                </select>
+                                                        <label>
+                                id Автора
+                                <input className="form-control"
+                                       type="text"
+                                       readOnly
+                                       name="name"
+                                       value={this.state.created_by}
+                                       onChange={(event) => this.handleChange(event)}/>
+                            </label>
+                                                        <label>
+                                id Проекта
+                                <input className="form-control"
+                                       type="text"
+                                       readOnly
+                                       name="name"
+                                       value={this.state.project}
+                                       onChange={(event) => this.handleChange(event)}/>
                             </label>
                         </div>
                     </div>
