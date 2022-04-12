@@ -109,9 +109,9 @@ const ProjectsPage = ({page, deleteProject, handleChange, handleSubmit, search_f
                 <div className="alert alert-success" role="alert">
                     <Link className="alert-link" to='/projects/create'>Создать новый проект</Link>
                 </div>
-                <div>
-                    <form className="form-group d-flex align-items-stretch" onSubmit={(event) => handleSubmit(event)}>
-                        <div className="d-flex align-items-stretch">
+                <div className="align-self-start">
+                    <form className="form-group d-flex flex-row" onSubmit={(event) => handleSubmit(event)}>
+                        <div className="d-flex m-2">
                             <label>
                                 Поиск по имени
                                 <input className="form-control"
@@ -121,9 +121,11 @@ const ProjectsPage = ({page, deleteProject, handleChange, handleSubmit, search_f
                                        value={search_field}
                                        onChange={(event) => handleChange(event)}/>
                             </label>
+                            <div className="m-2">
+                            </div>
                             <button className="btn btn-outline-info btn-default" type="submit">Поиск</button>
                         </div>
-                        <div className="d-flex align-items-stretch">
+                        <div className="d-flex align-items-stretch m-2">
                             <button className="btn btn-outline-danger btn-sm" type="reset"
                                     onClick={(event) => handleCancel(event)}>Отменить
                             </button>

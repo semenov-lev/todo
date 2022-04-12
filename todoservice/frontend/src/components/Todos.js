@@ -79,7 +79,7 @@ const TodosList = ({todos, deleteButton}) => {
 
 
 const TodosPage = ({page, deleteToDo}) => {
-    const todos = page.results.filter((todo) => todo.is_active === true)
+    const todos = page.results ? page.results.filter((todo) => todo.is_active === true) : []
     return (
         <div>
             <h1>Количество заметок: {page.count}</h1>

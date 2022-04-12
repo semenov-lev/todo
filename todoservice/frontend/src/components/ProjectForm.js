@@ -55,9 +55,9 @@ class ProjectForm extends React.Component {
             for (let i = 0; i < event.target.selectedOptions.length; i++) {
                 selected_users.push(event.target.selectedOptions.item(i).value)
             }
-            this.setState({users: selected_users}, () => console.log(selected_users))
+            this.setState({users: selected_users})
         } else {
-            this.setState({users: []}, () => console.log("Пусто"))
+            this.setState({users: []})
         }
     }
 
@@ -155,12 +155,10 @@ class ProjectForm extends React.Component {
                                         name="users"
                                         multiple
                                         size={8}
-                                        onChange={(event) => this.handleSelectUsers(event)}>
+                                        onChange={(event) => this.handleSelectUsers(event)}
+                                        value={this.state.users}>
                                     {this.props.users.map((user) =>
-                                        <option key={user.id}
-                                                value={user.id}
-                                                selected={this.state.users.includes(user.id)}>{user.username}
-                                        </option>)}
+                                        <option key={user.id} value={user.id}>{user.username}</option>)}
                                 </select>
                             </label>
 
@@ -171,20 +169,16 @@ class ProjectForm extends React.Component {
                                             name="status"
                                             value={this.state.status}
                                             onChange={(event) => this.handleChange(event)}>
-                                        <option value={'Сдан'}
-                                                selected={this.state.status === 'Сдан'}>Сдан
+                                        <option value={'Сдан'}>Сдан
                                         </option>
-                                        <option value={'В процессе'}
-                                                selected={this.state.status === 'В процессе'}>В процессе
+                                        <option value={'В процессе'}>В процессе
                                         </option>
-                                        <option value={'Просрочен'}
-                                                selected={this.state.status === 'Просрочен'}>Просрочен
+                                        <option value={'Просрочен'}>Просрочен
                                         </option>
-                                        <option value={'Отменен'}
-                                                selected={this.state.status === 'Отменен'}>Отменен
+                                        <option value={'Отменен'}>Отменен
                                         </option>
                                     </select>
-                                </label> : null}
+                                </label> : ""}
                         </div>
                     </div>
                     <button className="btn btn-outline-info btn-lg px-5"

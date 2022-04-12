@@ -1,5 +1,5 @@
 import React from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 
 const ToDoTable = ({todo}) => {
@@ -28,6 +28,9 @@ const ToDoTable = ({todo}) => {
                 <th>
                     id Проекта
                 </th>
+                <th>
+                    Действия
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -52,6 +55,10 @@ const ToDoTable = ({todo}) => {
                 </td>
                 <td>
                     {todo.project}
+                </td>
+                <td>
+                    <Link className="list-group-item list-group-item-action link-primary mb-3"
+                          to={`/todo/update/${todo.id}`}>Изменить ToDo</Link>
                 </td>
             </tr>
             </tbody>

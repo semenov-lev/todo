@@ -146,7 +146,6 @@ class App extends React.Component {
             rep_url: rep_url,
             status: status
         }
-        console.log(data)
         axios.put(getUrl(`projects/${this.state.project_id}/`), data, {headers}).then(response => {
             this.loadData()
             alert("Успешно обновлено!")
@@ -168,6 +167,24 @@ class App extends React.Component {
         axios.post(getUrl(TODOS_URL), data, {headers}).then(response => {
             this.loadData()
             alert("Успешно создано!")
+        }).catch(error => {
+                console.log(error)
+                alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
+            }
+        )
+    }
+
+    updateToDo(name, description, created_by, project) {
+        const headers = this.getHeaders()
+        const data = {
+            name: name,
+            description: description,
+            created_by: created_by,
+            project: project
+        }
+        axios.put(getUrl(`todos/${this.state.todo_id}/`), data, {headers}).then(response => {
+            this.loadData()
+            alert("Успешно обновлено!")
         }).catch(error => {
                 console.log(error)
                 alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
@@ -328,6 +345,18 @@ class App extends React.Component {
                                  description,
                                  created_by,
                                  project)}
+                             updateToDo={(name,
+                                          description,
+                                          created_by,
+                                          project
+                             ) => this.updateToDo(name,
+                                 description,
+                                 created_by,
+                                 project)}
+                             currentToDo={this.state.todo}
+                             setCurrentToDo={(id) => this.setCurrentToDo(id)}
+                             projects={this.state.projects.results}
+                             users={this.state.users.results}
                              extra_props={params}/>
         }
 
@@ -398,6 +427,11 @@ class App extends React.Component {
                                        <Navigate to="/login"/>}/>
 
                             <Route path='/todos/create/:id'
+                                   element={this.isAuthenticated() ?
+                                       <ToDoWrapper/> :
+                                       <Navigate to="/login"/>}/>
+
+                            <Route path='/todo/update/:id'
                                    element={this.isAuthenticated() ?
                                        <ToDoWrapper/> :
                                        <Navigate to="/login"/>}/>
