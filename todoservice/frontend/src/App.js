@@ -55,17 +55,19 @@ class App extends React.Component {
         this.setState(
             {
                 search_field: event.target.value
-            }, () => console.log(event.target.value)
+            }
+            // , () => console.log(event.target.value)
         )
     }
 
     handleSubmit(event) {
         if (this.state.search_field) {
             let project_page = this.state.projects
-            let filtered_projects = this.state.projects.results.filter((project) =>
+            project_page.results = this.state.projects.results.filter((project) =>
                 project.name.toLowerCase().includes(this.state.search_field.toLowerCase()))
-            project_page.results = filtered_projects
-            this.setState({projects: project_page}, () => console.log("Успешно отфильтровалось"))
+            this.setState({projects: project_page}
+                // , () => console.log("Успешно отфильтровалось")
+            )
             event.preventDefault();
         }
     }
@@ -174,7 +176,7 @@ class App extends React.Component {
 
         axios.post(getUrl(TOKEN_REFRESH_URL), {refresh: refresh}).then(response => {
             let token = response.data['access']
-            console.log(`New token: ${token}`)
+            // console.log(`New token: ${token}`)
             this.setTokenData(token)
         }).catch(error => {
             console.log(error)
@@ -183,8 +185,8 @@ class App extends React.Component {
 
     getDataFromCookies() {
         this.setState({token: cookies.get('token'), refresh: cookies.get('refresh')}, () => {
-            console.log(`Current token: ${this.state.token ? this.state.token : "None"}`)
-            console.log(`Current refresh: ${this.state.refresh ? this.state.refresh : "None"}`)
+            // console.log(`Current token: ${this.state.token ? this.state.token : "None"}`)
+            // console.log(`Current refresh: ${this.state.refresh ? this.state.refresh : "None"}`)
             this.tokenAliveCheck()
         })
     }
@@ -267,20 +269,24 @@ class App extends React.Component {
         if (this.state.project_id) {
             axios.get(getUrl(`projects/${this.state.project_id}/`), {headers}).then(response => {
                 const project = response.data
-                this.setState({project: project}, () => console.log("Обновилось состояние проекта"))
+                this.setState({project: project}
+                    // , () => console.log("Обновилось состояние проекта")
+                )
             }).catch(error => {
                 console.log(error)
-                this.setState({project: {}})
+                error.response.status === 403 ? this.tokenAliveCheck() : this.setState({project: {}})
             })
         }
 
         if (this.state.todo_id) {
             axios.get(getUrl(`todos/${this.state.todo_id}/`), {headers}).then(response => {
                 const todo = response.data
-                this.setState({todo: todo}, () => console.log("Обновилось состояние заметки"))
+                this.setState({todo: todo}
+                    // , () => console.log("Обновилось состояние заметки")
+                )
             }).catch(error => {
                 console.log(error)
-                this.setState({todo: {}})
+                error.response.status === 403 ? this.tokenAliveCheck() : this.setState({todo: {}})
             })
         }
 

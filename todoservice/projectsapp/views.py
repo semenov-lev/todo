@@ -26,9 +26,13 @@ class ProjectModelViewSet(ModelViewSet):
         name = self.request.query_params.get('name', '')
         projects = Project.objects.all()
         for project in projects:
-            if project.deadline_timestamp < now:
-                project.status = 'EXP'
+            if project.status != 'DON' and project.status != 'CNL':
+                if project.deadline_timestamp < now:
+                    project.status = 'EXP'
+                else:
+                    project.status = 'PRC'
                 project.save()
+
         if name:
             projects = projects.filter(name__contains=name)
         return projects
