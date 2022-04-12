@@ -31,7 +31,7 @@ const UserList = ({users}) => {
             <thead>
             <tr>
                 <th>
-                    id
+                    ID
                 </th>
                 <th>
                     Имя пользователя

@@ -29,10 +29,16 @@ class ToDoForm extends React.Component {
         event.preventDefault()
     }
 
+    isOperationCreate() {
+        const operation = window.location.href.split("/")[window.location.href.split("/").length - 2]
+        return operation === "create"
+    }
+
     render() {
         return (
             <div className="container py-5 h-50 card d-flex justify-content-center align-items-center">
-                <div className="card-header m-2"><h1>Создание новой заметки ToDo</h1></div>
+                <div className="card-header m-2">
+                    <h1>{this.isOperationCreate() ? "Создание новой заметки ToDo" : "Обновление заметки ToDo"}</h1></div>
                 <form className="form-group d-flex flex-column" onSubmit={(event) => this.handleSubmit(event)}>
                     <div className="d-flex justify-content-around">
                         <div className="d-flex flex-column m-2">
@@ -56,7 +62,7 @@ class ToDoForm extends React.Component {
                             </label>
                         </div>
                         <div className="d-flex flex-column m-2">
-                                                        <label>
+                            <label>
                                 id Автора
                                 <input className="form-control"
                                        type="text"
@@ -65,7 +71,7 @@ class ToDoForm extends React.Component {
                                        value={this.state.created_by}
                                        onChange={(event) => this.handleChange(event)}/>
                             </label>
-                                                        <label>
+                            <label>
                                 id Проекта
                                 <input className="form-control"
                                        type="text"
@@ -76,7 +82,8 @@ class ToDoForm extends React.Component {
                             </label>
                         </div>
                     </div>
-                    <button className="btn btn-outline-info btn-lg px-5" type="submit">Создать
+                    <button className="btn btn-outline-info btn-lg px-5"
+                            type="submit">{this.isOperationCreate() ? "Создать" : "Обновить"}
                     </button>
                 </form>
             </div>

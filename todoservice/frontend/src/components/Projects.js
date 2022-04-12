@@ -7,8 +7,7 @@ const ProjectItem = ({project, deleteButton}) => {
     return (
         <tr>
             <td>
-                {project.id}<br/>
-                <Link to={`/project/${project.id}`}>Просмотр</Link>
+                {project.id}
             </td>
             <td>
                 {project.name}
@@ -42,6 +41,8 @@ const ProjectItem = ({project, deleteButton}) => {
                 </ul>
             </td>
             <td style={{textAlign: "center"}}>
+                <Link className="list-group-item list-group-item-action link-primary mb-3"
+                      to={`/project/${project.id}`}>Просмотр</Link>
                 <button type="button" className="btn btn-outline-danger btn-lg"
                         onClick={() => deleteButton(project.id)}>Удалить
                 </button>
@@ -58,7 +59,7 @@ const ProjectsList = ({projects, deleteButton}) => {
             <thead>
             <tr>
                 <th>
-                    id
+                    ID
                 </th>
                 <th>
                     Наименование
@@ -88,6 +89,7 @@ const ProjectsList = ({projects, deleteButton}) => {
                     Участники
                 </th>
                 <th>
+                    Действия
                 </th>
             </tr>
             </thead>
@@ -122,14 +124,16 @@ const ProjectsPage = ({page, deleteProject, handleChange, handleSubmit, search_f
                             <button className="btn btn-outline-info btn-default" type="submit">Поиск</button>
                         </div>
                         <div className="d-flex align-items-stretch">
-                            <button className="btn btn-outline-danger btn-sm" type="reset" onClick={(event) => handleCancel(event)}>Отменить</button>
+                            <button className="btn btn-outline-danger btn-sm" type="reset"
+                                    onClick={(event) => handleCancel(event)}>Отменить
+                            </button>
                         </div>
-                </form>
+                    </form>
+                </div>
             </div>
+            <ProjectsList projects={page.results} deleteButton={deleteProject}/>
         </div>
-    <ProjectsList projects={page.results} deleteButton={deleteProject}/>
-</div>
-)
+    )
 }
 
 

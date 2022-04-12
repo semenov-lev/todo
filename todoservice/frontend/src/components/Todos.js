@@ -6,8 +6,7 @@ const TodoItem = ({todo, deleteButton}) => {
     return (
         <tr>
             <td>
-                {todo.id}<br/>
-                <Link to={`/todo/${todo.id}`}>Просмотр</Link>
+                {todo.id}
             </td>
             <td>
                 {todo.name}
@@ -28,6 +27,8 @@ const TodoItem = ({todo, deleteButton}) => {
                 {todo.project}
             </td>
             <td style={{textAlign: "center"}}>
+                <Link className="list-group-item list-group-item-action link-primary mb-3"
+                      to={`/todo/${todo.id}`}>Просмотр</Link>
                 <button type="button" className="btn btn-outline-danger btn-lg"
                         onClick={() => deleteButton(todo.id)}>Удалить
                 </button>
@@ -65,6 +66,7 @@ const TodosList = ({todos, deleteButton}) => {
                     id Проекта
                 </th>
                 <th>
+                    Действия
                 </th>
             </tr>
             </thead>

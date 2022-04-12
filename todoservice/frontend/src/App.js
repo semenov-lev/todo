@@ -74,7 +74,6 @@ class App extends React.Component {
 
     handleCancel(event) {
         this.loadData()
-        alert("Успешно отменено!")
         event.preventDefault();
     }
 
@@ -130,6 +129,27 @@ class App extends React.Component {
         axios.post(getUrl(PROJECTS_URL), data, {headers}).then(response => {
             this.loadData()
             alert("Успешно создано!")
+        }).catch(error => {
+                console.log(error)
+                alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
+            }
+        )
+    }
+
+    updateProject(name, description, deadline_timestamp, users, rep_url, status) {
+        const headers = this.getHeaders()
+        const data = {
+            name: name,
+            description: description,
+            deadline_timestamp: deadline_timestamp,
+            users: users,
+            rep_url: rep_url,
+            status: status
+        }
+        console.log(data)
+        axios.put(getUrl(`projects/${this.state.project_id}/`), data, {headers}).then(response => {
+            this.loadData()
+            alert("Успешно обновлено!")
         }).catch(error => {
                 console.log(error)
                 alert("Произошло что-то непонятное!\nГде-то допущена ошибка!")
@@ -310,6 +330,24 @@ class App extends React.Component {
                                  project)}
                              extra_props={params}/>
         }
+
+        const ProjectWrapper = (props) => {
+            const params = useParams();
+            return <ProjectForm users={this.state.users.results}
+                                setCurrentProject={(id) => this.setCurrentProject(id)}
+                                currentProject={this.state.project}
+                                updateProject={(name,
+                                                description,
+                                                deadline_timestamp,
+                                                users, rep_url, status
+                                ) => this.updateProject(name,
+                                    description,
+                                    deadline_timestamp,
+                                    users,
+                                    rep_url,
+                                    status)}
+                                extra_props={params}/>
+        }
         return (
             <>
                 <BrowserRouter>
@@ -352,6 +390,11 @@ class App extends React.Component {
                                                         deadline_timestamp,
                                                         users,
                                                         rep_url)}/> :
+                                       <Navigate to="/login"/>}/>
+
+                            <Route path='/project/update/:id'
+                                   element={this.isAuthenticated() ?
+                                       <ProjectWrapper/> :
                                        <Navigate to="/login"/>}/>
 
                             <Route path='/todos/create/:id'

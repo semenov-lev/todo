@@ -10,7 +10,7 @@ const ProjectTable = ({project}) => {
             <thead>
             <tr>
                 <th>
-                    id
+                    ID
                 </th>
                 <th>
                     Наименование
@@ -39,7 +39,8 @@ const ProjectTable = ({project}) => {
                 <th>
                     Участники
                 </th>
-                                <th>
+                <th>
+                    Действия
                 </th>
             </tr>
             </thead>
@@ -79,8 +80,11 @@ const ProjectTable = ({project}) => {
                         {users.map((user) => <li key={user}>{user}</li>)}
                     </ul>
                 </td>
-                <td>
-                    <Link className="link-danger" to={`/todos/create/${project.id}`}>Создать заметку</Link>
+                <td className="m-auto">
+                    <Link className="list-group-item list-group-item-action link-primary mb-3"
+                          to={`/project/update/${project.id}`}>Изменить проект</Link>
+                    <Link className="list-group-item list-group-item-action link-primary"
+                          to={`/todos/create/${project.id}`}>Добавить ToDo</Link>
                 </td>
             </tr>
             </tbody>
@@ -100,4 +104,4 @@ const ProjectDetail = ({setCurrentProject, project}) => {
 }
 
 
-export default ProjectDetail
+export default ProjectDetail;
