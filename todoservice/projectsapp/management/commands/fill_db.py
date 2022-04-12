@@ -1,3 +1,6 @@
+import datetime
+import random
+
 from django.core.management.base import BaseCommand
 from mixer.backend.django import mixer
 from django.contrib.auth.hashers import make_password
@@ -7,6 +10,8 @@ from usersapp.models import User
 
 
 class Command(BaseCommand):
+    now = datetime.datetime.now()
+
     def add_arguments(self, parser):
         parser.add_argument("count", type=int)
 
@@ -21,5 +26,6 @@ class Command(BaseCommand):
         User.objects.create_superuser('lev', 'lev@mail.local', 'django')
 
         for i in range(count - 1):
-            mixer.blend(ToDo, created_by__password=lambda: make_password('test'), is_active=True)
+            mixer.blend(ToDo, created_by__password=lambda: make_password('test'), is_active=True,
+                        project__deadline_timestamp=lambda: self.now + datetime.timedelta(days=random.randint(-30, 30)))
         print('Done')

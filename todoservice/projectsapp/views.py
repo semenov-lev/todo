@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import status
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
@@ -19,8 +21,14 @@ class ProjectModelViewSet(ModelViewSet):
     # pagination_class = ProjectLimitOffsetPagination
 
     def get_queryset(self):
+        now = datetime.now()
+
         name = self.request.query_params.get('name', '')
         projects = Project.objects.all()
+        for project in projects:
+            if project.deadline_timestamp < now:
+                project.status = 'EXP'
+                project.save()
         if name:
             projects = projects.filter(name__contains=name)
         return projects

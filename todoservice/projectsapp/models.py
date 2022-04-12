@@ -17,7 +17,7 @@ class Project(models.Model):
     )
 
     name = models.CharField(verbose_name='Наименование', max_length=32, unique=True)
-    users = models.ManyToManyField(User, verbose_name='Пользователи', blank=True, null=True)
+    users = models.ManyToManyField(User, verbose_name='Пользователи', related_name='users', blank=True)
     description = models.TextField(verbose_name='Описание', blank=True)
     rep_url = models.URLField(verbose_name='Ссылка на репозиторий', blank=True)
     status = models.CharField(verbose_name='Статус', choices=STATUS_CHOICES, max_length=3, default='PRC')

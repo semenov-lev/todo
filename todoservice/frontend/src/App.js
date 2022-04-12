@@ -60,7 +60,6 @@ class App extends React.Component {
     }
 
     handleSubmit(event) {
-        // debugger
         if (this.state.search_field) {
             let project_page = this.state.projects
             let filtered_projects = this.state.projects.results.filter((project) =>
