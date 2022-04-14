@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-tkmh$9a58)7$!e&ng$t+k#%ujiow1r^r*#^ji#fgv14*bxr6jk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -83,10 +83,21 @@ WSGI_APPLICATION = 'todoservice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'todo',
+        'USER': 'lev',
+        'PASSWORD': 'django',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
